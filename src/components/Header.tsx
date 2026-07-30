@@ -1,11 +1,13 @@
 import React from 'react';
-import { Plus, FolderGit2, Eye, LayoutGrid } from 'lucide-react';
+import { Plus, FolderGit2, Eye, LayoutGrid, KeyRound, LogOut } from 'lucide-react';
 
 interface HeaderProps {
   onOpenAddModal: () => void;
   totalProjects: number;
   currentMode: 'manager' | 'showcase';
   onModeChange: (mode: 'manager' | 'showcase') => void;
+  onOpenSecuritySettings?: () => void;
+  onLockAdmin?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -13,6 +15,8 @@ export const Header: React.FC<HeaderProps> = ({
   totalProjects,
   currentMode,
   onModeChange,
+  onOpenSecuritySettings,
+  onLockAdmin,
 }) => {
   return (
     <header className="border-b-2 border-neutral-800 bg-[#0d0d0d]/90 backdrop-blur-md sticky top-0 z-30">
@@ -37,7 +41,7 @@ export const Header: React.FC<HeaderProps> = ({
         </div>
 
         {/* Navigation Mode Switcher & Add Button */}
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center space-x-2 sm:space-x-3">
           {/* Mode Tabs */}
           <div className="bg-[#141414] border border-neutral-800 p-1 flex items-center space-x-1">
             <button
@@ -63,6 +67,26 @@ export const Header: React.FC<HeaderProps> = ({
               <span>Public Showcase</span>
             </button>
           </div>
+
+          {currentMode === 'manager' && onOpenSecuritySettings && (
+            <button
+              onClick={onOpenSecuritySettings}
+              title="Change Admin PIN"
+              className="p-2 bg-[#181818] hover:bg-[#222222] text-neutral-300 border border-neutral-800 transition-colors cursor-pointer"
+            >
+              <KeyRound className="w-4 h-4 text-rose-400" />
+            </button>
+          )}
+
+          {currentMode === 'manager' && onLockAdmin && (
+            <button
+              onClick={onLockAdmin}
+              title="Lock Admin Session"
+              className="p-2 bg-[#181818] hover:bg-rose-950 text-neutral-300 hover:text-rose-400 border border-neutral-800 hover:border-rose-800 transition-colors cursor-pointer"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
+          )}
 
           <button
             onClick={onOpenAddModal}

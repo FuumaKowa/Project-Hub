@@ -16,6 +16,7 @@ import { ProjectCard } from './components/ProjectCard';
 import { AddProjectModal } from './components/AddProjectModal';
 import { SeedDataButton } from './components/SeedDataButton';
 import { PublicShowcaseView } from './components/PublicShowcaseView';
+import { AdminAuthModal } from './components/AdminAuthModal';
 import { Toast, ToastMessage } from './components/Toast';
 import { FolderGit2, Plus, Sparkles, Loader2, SearchX } from 'lucide-react';
 
@@ -39,21 +40,15 @@ export default function App() {
   const [quickAddUrl, setQuickAddUrl] = useState('');
   const [isQuickAnalyzing, setIsQuickAnalyzing] = useState(false);
 
-  // Check URL query parameters (default is showcase, allows ?view=manager)
-  useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    if (params.get('view') === 'manager' || params.get('mode') === 'manager' || params.get('admin') === 'true') {
-      setViewMode('manager');
-    } else if (params.get('view') === 'showcase' || params.get('mode') === 'showcase') {
-      setViewMode('showcase');
-    }
-  }, []);
-
-  // Filters & Search
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>('All');
-  const [sortBy, setSortBy] = useState<'newest' | 'clicks' | 'alphabetical' | 'favorites'>('newest');
-  const [favoritesOnly, setFavoritesOnly] = useState(false);
+  // Admin PIN Security State
+  const [adminPin, setAdminPin] = useState<string>(() => {
+    return localStorage.getItem('admin_pin') || '8888';
+  });
+  const [isAdminAuth, setIsAdminAuth] = useState<boolean>(() => {
+    return sessionStorage.getItem('admin_authenticated') === 'true';
+  });
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
+  const [isChangePinMode, setIsChangePinMode] = useState<boolean>(false);
 
   // Toast feedback
   const [toast, setToast] = useState<ToastMessage | null>(null);
@@ -61,6 +56,76 @@ export default function App() {
   const showToast = (text: string, type: 'success' | 'error' | 'info' = 'success') => {
     setToast({ id: Date.now().toString(), text, type });
   };
+
+  // Check URL query parameters for secret PIN / key access or mode request
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const urlPin = params.get('pin') || params.get('secret') || params.get('adminKey') || params.get('key');
+    const storedPin = localStorage.getItem('admin_pin') || '8888';
+
+    // 1. Secret Link PIN Access
+    if (urlPin && urlPin.trim() === storedPin) {
+      sessionStorage.setItem('admin_authenticated', 'true');
+      setIsAdminAuth(true);
+      setViewMode('manager');
+      showToast('Unlocked via secret URL parameter!', 'success');
+      return;
+    }
+
+    // 2. Direct view mode parameters
+    if (params.get('view') === 'manager' || params.get('mode') === 'manager' || params.get('admin') === 'true') {
+      if (sessionStorage.getItem('admin_authenticated') === 'true') {
+        setViewMode('manager');
+      } else {
+        setViewMode('showcase');
+        setIsAuthModalOpen(true);
+      }
+    } else if (params.get('view') === 'showcase' || params.get('mode') === 'showcase') {
+      setViewMode('showcase');
+    }
+  }, []);
+
+  const handleSwitchMode = (targetMode: 'manager' | 'showcase') => {
+    if (targetMode === 'showcase') {
+      setViewMode('showcase');
+      return;
+    }
+
+    if (targetMode === 'manager') {
+      if (isAdminAuth) {
+        setViewMode('manager');
+      } else {
+        setIsChangePinMode(false);
+        setIsAuthModalOpen(true);
+      }
+    }
+  };
+
+  const handleAuthSuccess = () => {
+    setIsAdminAuth(true);
+    setViewMode('manager');
+    showToast(isChangePinMode ? 'Admin PIN updated' : 'Admin unlocked!', 'success');
+  };
+
+  const handleLockAdmin = () => {
+    sessionStorage.removeItem('admin_authenticated');
+    setIsAdminAuth(false);
+    setViewMode('showcase');
+    showToast('Admin session locked', 'info');
+  };
+
+  const handleUpdatePin = (newPin: string) => {
+    localStorage.setItem('admin_pin', newPin);
+    setAdminPin(newPin);
+    showToast('Admin PIN updated successfully!', 'success');
+  };
+
+  // Filters & Search
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>('All');
+  const [sortBy, setSortBy] = useState<'newest' | 'clicks' | 'alphabetical' | 'favorites'>('newest');
+  const [favoritesOnly, setFavoritesOnly] = useState(false);
+
 
   // Real-time Firestore sync
   useEffect(() => {
@@ -228,7 +293,15 @@ export default function App() {
         <PublicShowcaseView
           projects={projects}
           onOpenProject={handleOpenProject}
-          onSwitchToManager={() => setViewMode('manager')}
+          onSwitchToManager={() => handleSwitchMode('manager')}
+        />
+        <AdminAuthModal
+          isOpen={isAuthModalOpen}
+          onClose={() => setIsAuthModalOpen(false)}
+          onSuccess={handleAuthSuccess}
+          storedPin={adminPin}
+          onUpdatePin={handleUpdatePin}
+          isChangeMode={isChangePinMode}
         />
         <Toast toast={toast} onClose={() => setToast(null)} />
       </>
@@ -246,7 +319,12 @@ export default function App() {
         }}
         totalProjects={projects.length}
         currentMode={viewMode}
-        onModeChange={setViewMode}
+        onModeChange={handleSwitchMode}
+        onOpenSecuritySettings={() => {
+          setIsChangePinMode(true);
+          setIsAuthModalOpen(true);
+        }}
+        onLockAdmin={handleLockAdmin}
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
@@ -352,6 +430,16 @@ export default function App() {
         onSave={handleSaveProject}
         initialUrl={quickAddUrl}
         initialData={editingProject}
+      />
+
+      {/* Admin Auth / PIN Change Modal */}
+      <AdminAuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        onSuccess={handleAuthSuccess}
+        storedPin={adminPin}
+        onUpdatePin={handleUpdatePin}
+        isChangeMode={isChangePinMode}
       />
 
       {/* Floating Toast notifications */}
