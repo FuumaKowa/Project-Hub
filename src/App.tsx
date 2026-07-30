@@ -33,16 +33,18 @@ const CATEGORIES: CategoryFilter[] = [
 export default function App() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
-  const [viewMode, setViewMode] = useState<'manager' | 'showcase'>('manager');
+  const [viewMode, setViewMode] = useState<'manager' | 'showcase'>('showcase');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [quickAddUrl, setQuickAddUrl] = useState('');
   const [isQuickAnalyzing, setIsQuickAnalyzing] = useState(false);
 
-  // Check URL query parameters for ?view=showcase
+  // Check URL query parameters (default is showcase, allows ?view=manager)
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    if (params.get('view') === 'showcase' || params.get('mode') === 'showcase') {
+    if (params.get('view') === 'manager' || params.get('mode') === 'manager' || params.get('admin') === 'true') {
+      setViewMode('manager');
+    } else if (params.get('view') === 'showcase' || params.get('mode') === 'showcase') {
       setViewMode('showcase');
     }
   }, []);
