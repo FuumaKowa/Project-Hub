@@ -1,5 +1,5 @@
 {
-  "name": "Project Hub",
+  "name": "Daniel's Projects",
   "description": "Store and showcase all your projects with interactive cards, auto-generated website thumbnails, and quick access links.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]

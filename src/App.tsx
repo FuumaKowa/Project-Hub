@@ -15,6 +15,7 @@ import { FilterBar } from './components/FilterBar';
 import { ProjectCard } from './components/ProjectCard';
 import { AddProjectModal } from './components/AddProjectModal';
 import { SeedDataButton } from './components/SeedDataButton';
+import { PublicShowcaseView } from './components/PublicShowcaseView';
 import { Toast, ToastMessage } from './components/Toast';
 import { FolderGit2, Plus, Sparkles, Loader2, SearchX } from 'lucide-react';
 
@@ -32,10 +33,19 @@ const CATEGORIES: CategoryFilter[] = [
 export default function App() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [viewMode, setViewMode] = useState<'manager' | 'showcase'>('manager');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
   const [quickAddUrl, setQuickAddUrl] = useState('');
   const [isQuickAnalyzing, setIsQuickAnalyzing] = useState(false);
+
+  // Check URL query parameters for ?view=showcase
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('view') === 'showcase' || params.get('mode') === 'showcase') {
+      setViewMode('showcase');
+    }
+  }, []);
 
   // Filters & Search
   const [searchQuery, setSearchQuery] = useState('');
@@ -191,6 +201,20 @@ export default function App() {
       });
   }, [projects, searchQuery, selectedCategory, sortBy, favoritesOnly]);
 
+  // If user selected Public Showcase Mode
+  if (viewMode === 'showcase') {
+    return (
+      <>
+        <PublicShowcaseView
+          projects={projects}
+          onOpenProject={handleOpenProject}
+          onSwitchToManager={() => setViewMode('manager')}
+        />
+        <Toast toast={toast} onClose={() => setToast(null)} />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#050505] text-white font-sans antialiased pb-16">
       {/* Top Bar */}
@@ -201,6 +225,8 @@ export default function App() {
           setIsAddModalOpen(true);
         }}
         totalProjects={projects.length}
+        currentMode={viewMode}
+        onModeChange={setViewMode}
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
