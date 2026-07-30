@@ -1,0 +1,61 @@
+{
+  "entities": {
+    "projects": {
+      "title": "Projects",
+      "description": "Stored project showcase links and auto-generated thumbnails",
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Project title or domain name"
+        },
+        "url": {
+          "type": "string",
+          "description": "Full URL to redirect to"
+        },
+        "description": {
+          "type": "string",
+          "description": "Extracted or custom project description"
+        },
+        "thumbnailUrl": {
+          "type": "string",
+          "description": "Generated website screenshot thumbnail URL"
+        },
+        "category": {
+          "type": "string",
+          "description": "Category tag e.g. Web App, Portfolio, Tool, Design, Mobile, Other"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "List of tags associated with the project"
+        },
+        "favicon": {
+          "type": "string",
+          "description": "Favicon URL extracted from the domain"
+        },
+        "status": {
+          "type": "string",
+          "description": "Project status e.g. active, archived"
+        },
+        "isFavorite": {
+          "type": "boolean",
+          "description": "Whether the project is pinned or favorited"
+        },
+        "clickCount": {
+          "type": "number",
+          "description": "Number of times redirected/clicked"
+        },
+        "createdAt": {
+          "type": "timestamp",
+          "description": "Creation timestamp"
+        },
+        "updatedAt": {
+          "type": "timestamp",
+          "description": "Last update timestamp"
+        }
+      }
+    }
+  }
+}
