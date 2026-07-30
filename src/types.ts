@@ -18,8 +18,10 @@ export interface Project {
 export type CategoryFilter = 'All' | 'Web App' | 'Portfolio' | 'Tool' | 'Design' | 'Mobile' | 'Open Source' | 'Other';
 
 export interface LinkMetadata {
+  url?: string;
   title: string;
   description: string;
+  thumbnailUrl?: string;
   ogImage?: string;
   favicon: string;
   screenshots: {

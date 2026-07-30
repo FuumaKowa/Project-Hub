@@ -87,11 +87,32 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
   const handleAnalyzeLink = async (targetUrl: string) => {
     if (!targetUrl.trim()) return;
     setIsAnalyzing(true);
+
+    let normalized = targetUrl.trim();
+    if (!/^https?:\/\//i.test(normalized)) {
+      normalized = `https://${normalized}`;
+    }
+
+    let domain = '';
+    try {
+      domain = new URL(normalized).hostname.replace(/^www\./, '');
+    } catch {
+      domain = normalized;
+    }
+
+    const wordpressScreenshot = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(normalized)}?w=1280&h=800`;
+    const microlinkScreenshot = `https://api.microlink.io/?url=${encodeURIComponent(normalized)}&screenshot=true&embed=screenshot.url`;
+    const thumIoScreenshot = `https://image.thum.io/get/width/1200/crop/800/${normalized}`;
+    const defaultFavicon = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
+
+    const fallbackTitle = domain ? domain.charAt(0).toUpperCase() + domain.slice(1) : 'New Project';
+    const fallbackDesc = `Project live at ${domain}`;
+
     try {
       const res = await fetch('/api/analyze-link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: targetUrl }),
+        body: JSON.stringify({ url: normalized }),
       });
 
       if (res.ok) {
@@ -102,18 +123,42 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
         if (!description || initialUrl) setDescription(data.description);
         if (data.suggestedCategory) setCategory(data.suggestedCategory);
         if (data.suggestedTags && data.suggestedTags.length > 0) setTags(data.suggestedTags);
-        setFavicon(data.favicon);
+        setFavicon(data.favicon || defaultFavicon);
 
-        // Default to wordpress screenshot unless ogImage is rich
-        const defaultThumb = data.screenshots.wordpress;
+        const defaultThumb = data.screenshots?.wordpress || wordpressScreenshot;
         setThumbnailUrl(defaultThumb);
         setSelectedEngine('wordpress');
+        setIsAnalyzing(false);
+        return;
       }
     } catch (err) {
-      console.error('Link analysis failed:', err);
-    } finally {
-      setIsAnalyzing(false);
+      console.warn('API route /api/analyze-link unreachable (e.g. static Cloudflare host), switching to client-side screenshot generators:', err);
     }
+
+    // Client-side fallback for Cloudflare Pages and static deployments
+    const clientData: LinkMetadata = {
+      url: normalized,
+      title: fallbackTitle,
+      description: fallbackDesc,
+      thumbnailUrl: wordpressScreenshot,
+      favicon: defaultFavicon,
+      screenshots: {
+        wordpress: wordpressScreenshot,
+        microlink: microlinkScreenshot,
+        thumIo: thumIoScreenshot,
+      },
+      suggestedCategory: 'Web App',
+      suggestedTags: [domain.split('.')[0] || 'web'],
+    };
+
+    setAnalysisResult(clientData);
+    setUrl(normalized);
+    if (!title || initialUrl) setTitle(fallbackTitle);
+    if (!description || initialUrl) setDescription(fallbackDesc);
+    setFavicon(defaultFavicon);
+    setThumbnailUrl(wordpressScreenshot);
+    setSelectedEngine('wordpress');
+    setIsAnalyzing(false);
   };
 
   const handleEngineChange = (engine: 'wordpress' | 'microlink' | 'thumIo' | 'ogImage' | 'custom') => {

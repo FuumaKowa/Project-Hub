@@ -141,25 +141,43 @@ export default function App() {
   // Re-peek and refresh screenshot
   const handleRefreshThumbnail = async (project: Project) => {
     showToast(`Re-peeking into ${project.url}...`, 'info');
+
+    let normalized = project.url.trim();
+    if (!/^https?:\/\//i.test(normalized)) {
+      normalized = `https://${normalized}`;
+    }
+    const domain = normalized.replace(/^https?:\/\//i, '').split('/')[0];
+    const defaultThumb = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(normalized)}?w=1280&h=800`;
+    const defaultFavicon = `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
+
+    let newThumb = defaultThumb;
+    let newFavicon = defaultFavicon;
+    let newTitle = project.title;
+
     try {
       const res = await fetch('/api/analyze-link', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url: project.url }),
+        body: JSON.stringify({ url: normalized }),
       });
 
       if (res.ok) {
         const data = await res.json();
-        const newThumb = data.screenshots.wordpress || project.thumbnailUrl;
-        const newFavicon = data.favicon || project.favicon;
-
-        await updateProject(project.id, {
-          thumbnailUrl: `${newThumb}&refresh=${Date.now()}`,
-          favicon: newFavicon,
-          title: data.title || project.title,
-        });
-        showToast(`Screenshot thumbnail refreshed for "${project.title}"`);
+        if (data.screenshots?.wordpress) newThumb = data.screenshots.wordpress;
+        if (data.favicon) newFavicon = data.favicon;
+        if (data.title) newTitle = data.title;
       }
+    } catch (err) {
+      console.warn('Backend API endpoint unavailable, generating screenshot thumbnail client-side');
+    }
+
+    try {
+      await updateProject(project.id, {
+        thumbnailUrl: `${newThumb}${newThumb.includes('?') ? '&' : '?'}cb=${Date.now()}`,
+        favicon: newFavicon,
+        title: newTitle,
+      });
+      showToast(`Screenshot thumbnail refreshed for "${project.title}"`);
     } catch (err) {
       showToast('Could not refresh thumbnail screenshot', 'error');
     }
