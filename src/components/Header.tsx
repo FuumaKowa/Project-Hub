@@ -19,37 +19,37 @@ export const Header: React.FC<HeaderProps> = ({
   onLockAdmin,
 }) => {
   return (
-    <header className="border-b-2 border-neutral-800 bg-[#0d0d0d]/90 backdrop-blur-md sticky top-0 z-30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-        <div className="flex items-center space-x-4">
-          <div className="w-10 h-10 bg-rose-600 border border-white text-white flex items-center justify-center font-black shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]">
-            <FolderGit2 className="w-5 h-5" />
+    <header className="apple-glass sticky top-0 z-30 border-b border-black/[0.08] transition-colors">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <div className="flex items-center space-x-3">
+          <div className="w-9 h-9 bg-[#0071e3] text-white rounded-xl flex items-center justify-center font-bold shadow-xs">
+            <FolderGit2 className="w-4 h-4" />
           </div>
           <div>
             <div className="flex items-center space-x-2">
-              <h1 className="text-lg sm:text-xl font-black uppercase tracking-wider text-white">
+              <h1 className="text-base sm:text-lg font-semibold tracking-tight text-[#1d1d1f]">
                 Project Hub
               </h1>
-              <span className="px-2.5 py-0.5 text-[11px] font-mono font-bold bg-[#1e1e1e] text-rose-400 border border-neutral-700">
+              <span className="px-2.5 py-0.5 text-xs font-medium bg-[#e8e8ed] text-[#515154] rounded-full">
                 {totalProjects} {totalProjects === 1 ? 'Project' : 'Projects'}
               </span>
             </div>
-            <p className="text-xs text-neutral-400 font-mono hidden sm:block">
-              Website bookmark directory & screenshot thumbnail generator
+            <p className="text-xs text-[#86868b] hidden sm:block">
+              Website bookmark directory & screenshot generator
             </p>
           </div>
         </div>
 
         {/* Navigation Mode Switcher & Add Button */}
         <div className="flex items-center space-x-2 sm:space-x-3">
-          {/* Mode Tabs */}
-          <div className="bg-[#141414] border border-neutral-800 p-1 flex items-center space-x-1">
+          {/* Segmented Mode Control */}
+          <div className="bg-[#e8e8ed]/80 p-1 rounded-full flex items-center space-x-1">
             <button
               onClick={() => onModeChange('manager')}
-              className={`px-3 py-1.5 text-xs font-mono font-bold uppercase tracking-wider flex items-center space-x-1.5 transition-colors cursor-pointer ${
+              className={`px-3.5 py-1 text-xs font-medium rounded-full flex items-center space-x-1.5 transition-all cursor-pointer ${
                 currentMode === 'manager'
-                  ? 'bg-rose-600 text-white border border-rose-500 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-white text-[#1d1d1f] shadow-xs font-semibold'
+                  : 'text-[#6e6e73] hover:text-[#1d1d1f]'
               }`}
             >
               <LayoutGrid className="w-3.5 h-3.5" />
@@ -57,10 +57,10 @@ export const Header: React.FC<HeaderProps> = ({
             </button>
             <button
               onClick={() => onModeChange('showcase')}
-              className={`px-3 py-1.5 text-xs font-mono font-bold uppercase tracking-wider flex items-center space-x-1.5 transition-colors cursor-pointer ${
+              className={`px-3.5 py-1 text-xs font-medium rounded-full flex items-center space-x-1.5 transition-all cursor-pointer ${
                 currentMode === 'showcase'
-                  ? 'bg-rose-600 text-white border border-rose-500 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]'
-                  : 'text-neutral-400 hover:text-white'
+                  ? 'bg-white text-[#1d1d1f] shadow-xs font-semibold'
+                  : 'text-[#6e6e73] hover:text-[#1d1d1f]'
               }`}
             >
               <Eye className="w-3.5 h-3.5" />
@@ -72,9 +72,9 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onOpenSecuritySettings}
               title="Change Admin PIN"
-              className="p-2 bg-[#181818] hover:bg-[#222222] text-neutral-300 border border-neutral-800 transition-colors cursor-pointer"
+              className="p-2 bg-white hover:bg-[#f2f2f7] text-[#515154] hover:text-[#1d1d1f] border border-black/[0.08] rounded-full shadow-xs transition-colors cursor-pointer"
             >
-              <KeyRound className="w-4 h-4 text-rose-400" />
+              <KeyRound className="w-4 h-4 text-[#0071e3]" />
             </button>
           )}
 
@@ -82,7 +82,7 @@ export const Header: React.FC<HeaderProps> = ({
             <button
               onClick={onLockAdmin}
               title="Lock Admin Session"
-              className="p-2 bg-[#181818] hover:bg-rose-950 text-neutral-300 hover:text-rose-400 border border-neutral-800 hover:border-rose-800 transition-colors cursor-pointer"
+              className="p-2 bg-white hover:bg-rose-50 text-[#515154] hover:text-rose-600 border border-black/[0.08] rounded-full shadow-xs transition-colors cursor-pointer"
             >
               <LogOut className="w-4 h-4" />
             </button>
@@ -90,7 +90,7 @@ export const Header: React.FC<HeaderProps> = ({
 
           <button
             onClick={onOpenAddModal}
-            className="inline-flex items-center space-x-2 px-4 py-2 text-xs font-mono font-black uppercase tracking-wider text-white bg-rose-600 hover:bg-rose-500 border border-rose-500 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)] transition-all cursor-pointer"
+            className="inline-flex items-center space-x-1.5 px-4 py-1.5 text-xs font-semibold text-white bg-[#0071e3] hover:bg-[#0077ed] rounded-full shadow-xs transition-all cursor-pointer"
           >
             <Plus className="w-4 h-4" />
             <span className="hidden sm:inline">Add Project</span>

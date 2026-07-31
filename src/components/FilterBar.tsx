@@ -30,7 +30,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
         {/* Search Input */}
         <div className="relative flex-1">
-          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+          <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#86868b]">
             <Search className="w-4 h-4" />
           </div>
           <input
@@ -38,7 +38,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search projects by title, link, tag, or keyword..."
-            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/80 focus:border-indigo-500 rounded-xl text-sm text-slate-900 focus:outline-none transition-colors shadow-2xs"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-black/[0.08] focus:border-[#0071e3] rounded-full text-sm text-[#1d1d1f] placeholder-[#86868b] focus:outline-none transition-all shadow-2xs"
           />
         </div>
 
@@ -46,10 +46,10 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           {/* Favorites Only toggle */}
           <button
             onClick={onToggleFavoritesOnly}
-            className={`px-3 py-2.5 rounded-xl border text-xs font-medium flex items-center space-x-1.5 cursor-pointer transition-all ${
+            className={`px-3.5 py-2 rounded-full border text-xs font-semibold flex items-center space-x-1.5 cursor-pointer transition-all ${
               favoritesOnly
                 ? 'bg-amber-500 text-white border-amber-500 shadow-xs'
-                : 'bg-white text-slate-700 border-slate-200/80 hover:bg-slate-50'
+                : 'bg-white text-[#515154] border-black/[0.08] hover:bg-[#f2f2f7]'
             }`}
           >
             <Star className={`w-3.5 h-3.5 ${favoritesOnly ? 'fill-white' : 'text-amber-500'}`} />
@@ -61,7 +61,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             <select
               value={sortBy}
               onChange={(e) => onSortChange(e.target.value as any)}
-              className="px-3 py-2.5 bg-white border border-slate-200/80 text-slate-700 text-xs font-medium rounded-xl focus:outline-none focus:border-indigo-500 cursor-pointer shadow-2xs"
+              className="px-3.5 py-2 bg-white border border-black/[0.08] text-[#1d1d1f] text-xs font-semibold rounded-full focus:outline-none focus:border-[#0071e3] cursor-pointer shadow-2xs"
             >
               <option value="newest">Newest First</option>
               <option value="favorites">Favorites First</option>
@@ -72,18 +72,18 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         </div>
       </div>
 
-      {/* Category Tabs */}
-      <div className="flex items-center space-x-1.5 overflow-x-auto pb-1 scrollbar-none">
+      {/* Category Segmented Control Pills */}
+      <div className="bg-[#e8e8ed]/80 p-1 rounded-2xl flex items-center space-x-1 overflow-x-auto scrollbar-none">
         {categories.map((cat) => {
           const isActive = selectedCategory === cat;
           return (
             <button
               key={cat}
               onClick={() => onCategoryChange(cat)}
-              className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap cursor-pointer transition-all ${
+              className={`px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap cursor-pointer transition-all ${
                 isActive
-                  ? 'bg-indigo-600 text-white shadow-xs'
-                  : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50'
+                  ? 'bg-white text-[#1d1d1f] shadow-xs font-semibold'
+                  : 'text-[#6e6e73] hover:text-[#1d1d1f]'
               }`}
             >
               {cat}

@@ -85,7 +85,7 @@ export const SeedDataButton: React.FC<SeedDataButtonProps> = ({ onSeeded }) => {
     <button
       onClick={handleSeed}
       disabled={loading}
-      className="inline-flex items-center space-x-2 px-4 py-2.5 bg-[#222222] hover:bg-[#2c2c2c] text-rose-400 font-mono font-bold text-xs uppercase tracking-wider border border-neutral-700 transition-colors cursor-pointer disabled:opacity-50"
+      className="inline-flex items-center space-x-2 px-4 py-2 bg-white hover:bg-[#f2f2f7] text-[#0071e3] font-semibold text-xs rounded-full border border-black/[0.08] transition-all cursor-pointer disabled:opacity-50 shadow-2xs"
     >
       {loading ? (
         <>

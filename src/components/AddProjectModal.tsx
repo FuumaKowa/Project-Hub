@@ -233,26 +233,26 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="bg-[#111111] rounded-none shadow-2xl max-w-2xl w-full overflow-hidden border-2 border-white my-8">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-xl p-4 overflow-y-auto animate-fade-in">
+      <div className="bg-white/95 backdrop-blur-2xl rounded-3xl shadow-2xl max-w-2xl w-full overflow-hidden border border-black/[0.1] my-8">
         {/* Modal Header */}
-        <div className="px-6 py-5 border-b-2 border-neutral-800 flex items-center justify-between bg-[#161616]">
+        <div className="px-6 py-4 border-b border-black/[0.08] flex items-center justify-between bg-[#f2f2f7]/80">
           <div className="flex items-center space-x-3">
-            <div className="w-9 h-9 rounded-none bg-[#222222] border border-neutral-700 text-rose-500 flex items-center justify-center font-bold">
+            <div className="w-9 h-9 rounded-xl bg-[#0071e3] text-white flex items-center justify-center font-bold shadow-xs">
               <FolderPlus className="w-5 h-5" />
             </div>
             <div>
-              <h3 className="text-lg font-black text-white uppercase tracking-wider">
+              <h3 className="text-base font-semibold text-[#1d1d1f] tracking-tight">
                 {initialData ? 'Edit Project Link' : 'Add New Project'}
               </h3>
-              <p className="text-xs text-neutral-400 font-mono">
+              <p className="text-xs text-[#86868b]">
                 Auto-peeks into website to generate screenshot thumbnail
               </p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-neutral-400 hover:text-white hover:bg-neutral-800 rounded-none transition-colors cursor-pointer border border-transparent hover:border-neutral-700"
+            className="p-1.5 text-[#86868b] hover:text-[#1d1d1f] hover:bg-black/5 rounded-full transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
@@ -262,12 +262,12 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           {/* Step 1: URL input & Peek action */}
           <div>
-            <label className="block text-xs font-bold text-neutral-300 uppercase tracking-widest mb-2 font-mono">
+            <label className="block text-xs font-semibold text-[#1d1d1f] mb-2">
               Website / Project Link <span className="text-rose-500">*</span>
             </label>
             <div className="flex flex-col sm:flex-row gap-2">
               <div className="relative flex-1">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-neutral-500">
+                <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#86868b]">
                   <Globe className="w-4 h-4" />
                 </div>
                 <input
@@ -276,14 +276,14 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                   placeholder="https://myproject.com or github.com/user/repo"
-                  className="w-full pl-9 pr-3 py-2.5 bg-[#181818] border border-neutral-700 focus:border-rose-500 focus:bg-[#202020] rounded-none text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors font-mono"
+                  className="w-full pl-10 pr-4 py-2.5 bg-[#f2f2f7] border border-black/[0.08] focus:border-[#0071e3] rounded-2xl text-sm text-[#1d1d1f] placeholder-[#86868b] focus:outline-none transition-all"
                 />
               </div>
               <button
                 type="button"
                 onClick={() => handleAnalyzeLink(url)}
                 disabled={!url.trim() || isAnalyzing}
-                className="px-4 py-2.5 bg-rose-600 hover:bg-rose-500 text-white font-bold text-xs uppercase tracking-wider rounded-none flex items-center justify-center space-x-2 border border-rose-500 transition-colors disabled:opacity-50 cursor-pointer shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]"
+                className="px-5 py-2.5 bg-[#0071e3] hover:bg-[#0077ed] text-white font-semibold text-xs rounded-full flex items-center justify-center space-x-2 transition-colors disabled:opacity-50 cursor-pointer shadow-xs"
               >
                 {isAnalyzing ? (
                   <>
@@ -301,14 +301,14 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
           </div>
 
           {/* Screenshot Thumbnail Preview & Engine Picker */}
-          <div className="bg-[#161616] border border-neutral-800 rounded-none p-4">
+          <div className="bg-[#f2f2f7]/80 border border-black/[0.08] rounded-2xl p-4">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs font-bold text-neutral-300 uppercase tracking-widest flex items-center space-x-1.5 font-mono">
-                <Camera className="w-3.5 h-3.5 text-rose-500" />
+              <span className="text-xs font-semibold text-[#1d1d1f] flex items-center space-x-1.5">
+                <Camera className="w-3.5 h-3.5 text-[#0071e3]" />
                 <span>Captured Screenshot Preview</span>
               </span>
               {thumbnailUrl && (
-                <span className="text-[11px] text-emerald-400 font-mono font-bold bg-emerald-950/60 px-2.5 py-1 rounded-none border border-emerald-800 flex items-center space-x-1 uppercase">
+                <span className="text-[11px] text-emerald-700 font-semibold bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200 flex items-center space-x-1">
                   <Check className="w-3 h-3" />
                   <span>Thumbnail Ready</span>
                 </span>
@@ -316,12 +316,12 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
             </div>
 
             {/* Thumbnail Display Box */}
-            <div className="relative aspect-video w-full rounded-none overflow-hidden bg-black border border-neutral-800 shadow-inner group">
+            <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-[#e5e5ea] border border-black/[0.08] shadow-inner group">
               {isAnalyzing ? (
-                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/90 text-white p-4">
-                  <Loader2 className="w-8 h-8 text-rose-500 animate-spin mb-2" />
-                  <p className="text-sm font-bold uppercase tracking-wider">Peeking into website...</p>
-                  <p className="text-xs text-neutral-400 font-mono">Taking screenshot & fetching page metadata</p>
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm text-white p-4">
+                  <Loader2 className="w-8 h-8 text-[#2997ff] animate-spin mb-2" />
+                  <p className="text-sm font-semibold">Peeking into website...</p>
+                  <p className="text-xs text-[#a1a1a6]">Taking screenshot & fetching page metadata</p>
                 </div>
               ) : thumbnailUrl ? (
                 <>
@@ -334,87 +334,50 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                     }}
                   />
                   {favicon && (
-                    <div className="absolute top-3 left-3 bg-black/90 backdrop-blur-sm p-1.5 rounded-none border border-neutral-700 shadow-xs flex items-center space-x-1.5">
-                      <img src={favicon} alt="Favicon" className="w-4 h-4 rounded-none" />
-                      <span className="text-[10px] font-mono font-bold text-neutral-300">
+                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full border border-black/[0.08] shadow-xs flex items-center space-x-1.5">
+                      <img src={favicon} alt="Favicon" className="w-3.5 h-3.5 rounded-full" />
+                      <span className="text-[10px] font-medium text-[#1d1d1f]">
                         {url.replace(/^https?:\/\//i, '').split('/')[0]}
                       </span>
                     </div>
                   )}
                 </>
               ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-neutral-500 p-6 text-center">
-                  <ImageIcon className="w-10 h-10 mb-2 stroke-1 text-neutral-600" />
-                  <p className="text-xs font-bold uppercase tracking-wider text-neutral-400">Enter website link & click Capture Thumbnail</p>
-                  <p className="text-[11px] text-neutral-500 font-mono mt-1">Automatic screenshot will appear here</p>
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-[#86868b] p-6 text-center">
+                  <ImageIcon className="w-10 h-10 mb-2 stroke-1 text-[#a1a1a6]" />
+                  <p className="text-xs font-semibold text-[#1d1d1f]">Enter website link & click Capture Thumbnail</p>
+                  <p className="text-[11px] text-[#86868b] mt-1">Automatic screenshot will appear here</p>
                 </div>
               )}
             </div>
 
             {/* Engine Options */}
             {analysisResult && (
-              <div className="mt-3 pt-3 border-t border-neutral-800">
-                <label className="block text-[11px] font-mono font-bold uppercase tracking-wider text-neutral-400 mb-2">
+              <div className="mt-3 pt-3 border-t border-black/[0.08]">
+                <label className="block text-[11px] font-semibold text-[#86868b] mb-2">
                   Select Screenshot Provider:
                 </label>
                 <div className="flex flex-wrap gap-1.5">
-                  <button
-                    type="button"
-                    onClick={() => handleEngineChange('wordpress')}
-                    className={`px-2.5 py-1 text-xs font-mono font-bold cursor-pointer transition-all ${
-                      selectedEngine === 'wordpress'
-                        ? 'bg-rose-600 text-white border border-rose-500'
-                        : 'bg-[#222222] text-neutral-300 border border-neutral-700 hover:bg-neutral-800'
-                    }`}
-                  >
-                    Engine 1 (Live MShots)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleEngineChange('microlink')}
-                    className={`px-2.5 py-1 text-xs font-mono font-bold cursor-pointer transition-all ${
-                      selectedEngine === 'microlink'
-                        ? 'bg-rose-600 text-white border border-rose-500'
-                        : 'bg-[#222222] text-neutral-300 border border-neutral-700 hover:bg-neutral-800'
-                    }`}
-                  >
-                    Engine 2 (Microlink)
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => handleEngineChange('thumIo')}
-                    className={`px-2.5 py-1 text-xs font-mono font-bold cursor-pointer transition-all ${
-                      selectedEngine === 'thumIo'
-                        ? 'bg-rose-600 text-white border border-rose-500'
-                        : 'bg-[#222222] text-neutral-300 border border-neutral-700 hover:bg-neutral-800'
-                    }`}
-                  >
-                    Engine 3 (Thum.io)
-                  </button>
-                  {analysisResult.ogImage && (
+                  {[
+                    { id: 'wordpress', name: 'Engine 1 (Live MShots)' },
+                    { id: 'microlink', name: 'Engine 2 (Microlink)' },
+                    { id: 'thumIo', name: 'Engine 3 (Thum.io)' },
+                    ...(analysisResult.ogImage ? [{ id: 'ogImage', name: 'Site Banner (OG)' }] : []),
+                    { id: 'custom', name: 'Custom URL' },
+                  ].map((engine) => (
                     <button
+                      key={engine.id}
                       type="button"
-                      onClick={() => handleEngineChange('ogImage')}
-                      className={`px-2.5 py-1 text-xs font-mono font-bold cursor-pointer transition-all ${
-                        selectedEngine === 'ogImage'
-                          ? 'bg-rose-600 text-white border border-rose-500'
-                          : 'bg-[#222222] text-neutral-300 border border-neutral-700 hover:bg-neutral-800'
+                      onClick={() => handleEngineChange(engine.id as any)}
+                      className={`px-3 py-1 text-xs font-semibold rounded-full transition-all cursor-pointer ${
+                        selectedEngine === engine.id
+                          ? 'bg-[#0071e3] text-white shadow-xs'
+                          : 'bg-white text-[#515154] border border-black/[0.08] hover:bg-[#e5e5ea]'
                       }`}
                     >
-                      Site Banner (OG)
+                      {engine.name}
                     </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={() => handleEngineChange('custom')}
-                    className={`px-2.5 py-1 text-xs font-mono font-bold cursor-pointer transition-all ${
-                      selectedEngine === 'custom'
-                        ? 'bg-rose-600 text-white border border-rose-500'
-                        : 'bg-[#222222] text-neutral-300 border border-neutral-700 hover:bg-neutral-800'
-                    }`}
-                  >
-                    Custom URL
-                  </button>
+                  ))}
                 </div>
 
                 {selectedEngine === 'custom' && (
@@ -426,7 +389,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                       setThumbnailUrl(e.target.value);
                     }}
                     placeholder="Paste custom image URL (https://...)"
-                    className="mt-2 w-full px-3 py-1.5 text-xs bg-[#181818] border border-neutral-700 text-white focus:outline-none focus:border-rose-500 font-mono"
+                    className="mt-2 w-full px-3 py-2 text-xs bg-white border border-black/[0.08] rounded-xl text-[#1d1d1f] focus:outline-none focus:border-[#0071e3]"
                   />
                 )}
               </div>
@@ -436,7 +399,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
           {/* Title & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-              <label className="block text-xs font-bold text-neutral-300 uppercase tracking-widest mb-1.5 font-mono">
+              <label className="block text-xs font-semibold text-[#1d1d1f] mb-1.5">
                 Project Title <span className="text-rose-500">*</span>
               </label>
               <input
@@ -445,21 +408,21 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="e.g. NextGen E-Commerce Portal"
-                className="w-full px-3.5 py-2.5 bg-[#181818] border border-neutral-700 focus:border-rose-500 focus:bg-[#202020] rounded-none text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors font-mono"
+                className="w-full px-3.5 py-2.5 bg-[#f2f2f7] border border-black/[0.08] focus:border-[#0071e3] focus:bg-white rounded-2xl text-sm text-[#1d1d1f] placeholder-[#86868b] focus:outline-none transition-all"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-neutral-300 uppercase tracking-widest mb-1.5 font-mono">
+              <label className="block text-xs font-semibold text-[#1d1d1f] mb-1.5">
                 Category
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-[#181818] border border-neutral-700 focus:border-rose-500 focus:bg-[#202020] rounded-none text-sm text-white focus:outline-none transition-colors cursor-pointer font-mono"
+                className="w-full px-3.5 py-2.5 bg-[#f2f2f7] border border-black/[0.08] focus:border-[#0071e3] focus:bg-white rounded-2xl text-sm text-[#1d1d1f] focus:outline-none transition-all cursor-pointer"
               >
                 {CATEGORIES.map((cat) => (
-                  <option key={cat} value={cat} className="bg-[#181818] text-white">
+                  <option key={cat} value={cat}>
                     {cat}
                   </option>
                 ))}
@@ -469,7 +432,7 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-bold text-neutral-300 uppercase tracking-widest mb-1.5 font-mono">
+            <label className="block text-xs font-semibold text-[#1d1d1f] mb-1.5">
               Description
             </label>
             <textarea
@@ -477,26 +440,26 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               placeholder="Short description of what you built in this project..."
-              className="w-full px-3.5 py-2.5 bg-[#181818] border border-neutral-700 focus:border-rose-500 focus:bg-[#202020] rounded-none text-sm text-white placeholder-neutral-500 focus:outline-none transition-colors resize-none font-mono"
+              className="w-full px-3.5 py-2.5 bg-[#f2f2f7] border border-black/[0.08] focus:border-[#0071e3] focus:bg-white rounded-2xl text-sm text-[#1d1d1f] placeholder-[#86868b] focus:outline-none transition-all resize-none"
             />
           </div>
 
           {/* Tags */}
           <div>
-            <label className="block text-xs font-bold text-neutral-300 uppercase tracking-widest mb-1.5 font-mono">
+            <label className="block text-xs font-semibold text-[#1d1d1f] mb-1.5">
               Tags
             </label>
-            <div className="flex flex-wrap gap-1.5 p-2 bg-[#181818] border border-neutral-700 rounded-none min-h-10 items-center">
+            <div className="flex flex-wrap gap-1.5 p-2 bg-[#f2f2f7] border border-black/[0.08] rounded-2xl min-h-11 items-center">
               {tags.map((t) => (
                 <span
                   key={t}
-                  className="inline-flex items-center px-2.5 py-1 rounded-none text-xs font-mono font-bold bg-[#222222] text-rose-400 border border-neutral-700"
+                  className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white text-[#1d1d1f] border border-black/[0.08] shadow-2xs"
                 >
                   #{t}
                   <button
                     type="button"
                     onClick={() => handleRemoveTag(t)}
-                    className="ml-1.5 text-neutral-500 hover:text-white cursor-pointer"
+                    className="ml-1.5 text-[#86868b] hover:text-[#1d1d1f] cursor-pointer"
                   >
                     &times;
                   </button>
@@ -508,24 +471,24 @@ export const AddProjectModal: React.FC<AddProjectModalProps> = ({
                 onChange={(e) => setTagInput(e.target.value)}
                 onKeyDown={handleKeyDownTag}
                 placeholder={tags.length === 0 ? "Type tag & press enter (e.g. react, tailwind)" : "+ Add tag"}
-                className="flex-1 bg-transparent border-none text-xs text-white placeholder-neutral-500 focus:outline-none px-1 font-mono"
+                className="flex-1 bg-transparent border-none text-xs text-[#1d1d1f] placeholder-[#86868b] focus:outline-none px-2"
               />
             </div>
           </div>
 
           {/* Actions */}
-          <div className="pt-4 border-t border-neutral-800 flex items-center justify-end space-x-3">
+          <div className="pt-4 border-t border-black/[0.08] flex items-center justify-end space-x-2">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 text-xs font-mono font-bold uppercase tracking-wider text-neutral-400 hover:text-white bg-[#1a1a1a] hover:bg-[#252525] border border-neutral-700 rounded-none cursor-pointer transition-colors"
+              className="px-4 py-2 text-xs font-semibold text-[#515154] hover:text-[#1d1d1f] bg-[#f2f2f7] hover:bg-[#e5e5ea] rounded-full transition-colors cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={!url.trim() || !title.trim() || isSaving}
-              className="px-5 py-2.5 text-xs font-black uppercase tracking-wider text-white bg-rose-600 hover:bg-rose-500 border border-rose-500 rounded-none cursor-pointer transition-colors disabled:opacity-50 flex items-center space-x-2 shadow-[2px_2px_0px_0px_rgba(255,255,255,0.2)]"
+              className="px-5 py-2 text-xs font-semibold text-white bg-[#0071e3] hover:bg-[#0077ed] rounded-full cursor-pointer transition-colors disabled:opacity-50 flex items-center space-x-1.5 shadow-xs"
             >
               {isSaving ? (
                 <>
