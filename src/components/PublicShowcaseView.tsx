@@ -20,6 +20,7 @@ interface PublicShowcaseViewProps {
   onOpenProject: (project: Project) => void;
   onSwitchToManager?: () => void;
   showAdminToggle?: boolean;
+  onOpenOgModal?: () => void;
 }
 
 export const PublicShowcaseView: React.FC<PublicShowcaseViewProps> = ({
@@ -27,6 +28,7 @@ export const PublicShowcaseView: React.FC<PublicShowcaseViewProps> = ({
   onOpenProject,
   onSwitchToManager,
   showAdminToggle = true,
+  onOpenOgModal,
 }) => {
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -85,22 +87,32 @@ export const PublicShowcaseView: React.FC<PublicShowcaseViewProps> = ({
 
           {/* Actions */}
           <div className="flex items-center space-x-2 sm:space-x-3">
-            <button
-              onClick={handleSharePortfolio}
-              className="px-3.5 py-1.5 text-xs font-medium bg-white hover:bg-[#f2f2f7] text-[#1d1d1f] border border-black/[0.08] rounded-full flex items-center space-x-1.5 shadow-xs transition-colors cursor-pointer"
-            >
-              {copiedShareLink ? (
-                <>
-                  <Check className="w-3.5 h-3.5 text-emerald-500" />
-                  <span className="text-emerald-600 font-semibold">Link Copied!</span>
-                </>
-              ) : (
-                <>
-                  <Share2 className="w-3.5 h-3.5 text-[#0071e3]" />
-                  <span className="hidden sm:inline">Share Showcase</span>
-                </>
-              )}
-            </button>
+            {onOpenOgModal ? (
+              <button
+                onClick={onOpenOgModal}
+                className="px-3.5 py-1.5 text-xs font-medium bg-white hover:bg-[#f2f2f7] text-[#1d1d1f] border border-black/[0.08] rounded-full flex items-center space-x-1.5 shadow-xs transition-colors cursor-pointer"
+              >
+                <Share2 className="w-3.5 h-3.5 text-[#0071e3]" />
+                <span className="hidden sm:inline">Social Share &amp; Preview</span>
+              </button>
+            ) : (
+              <button
+                onClick={handleSharePortfolio}
+                className="px-3.5 py-1.5 text-xs font-medium bg-white hover:bg-[#f2f2f7] text-[#1d1d1f] border border-black/[0.08] rounded-full flex items-center space-x-1.5 shadow-xs transition-colors cursor-pointer"
+              >
+                {copiedShareLink ? (
+                  <>
+                    <Check className="w-3.5 h-3.5 text-emerald-500" />
+                    <span className="text-emerald-600 font-semibold">Link Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 className="w-3.5 h-3.5 text-[#0071e3]" />
+                    <span className="hidden sm:inline">Share Showcase</span>
+                  </>
+                )}
+              </button>
+            )}
 
             {showAdminToggle && onSwitchToManager && (
               <button

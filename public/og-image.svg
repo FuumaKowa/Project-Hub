@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <!-- Smooth background gradient -->
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8f8fa"/>
+      <stop offset="100%" stop-color="#e8e8ed"/>
+    </linearGradient>
+
+    <!-- Accent Blue Gradient -->
+    <linearGradient id="blueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0071e3"/>
+      <stop offset="100%" stop-color="#005bb5"/>
+    </linearGradient>
+
+    <!-- Card Shadow -->
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="12" stdDeviation="20" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+
+    <filter id="subtleShadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="10" flood-color="#000000" flood-opacity="0.04"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Decorative subtle background circles -->
+  <circle cx="1050" cy="100" r="300" fill="#0071e3" fill-opacity="0.04"/>
+  <circle cx="150" cy="500" r="250" fill="#0071e3" fill-opacity="0.03"/>
+
+  <!-- Main Showcase Container Card (Apple Glass Design) -->
+  <rect x="80" y="60" width="1040" height="510" rx="32" fill="#ffffff" fill-opacity="0.9" stroke="#000000" stroke-opacity="0.08" stroke-width="1.5" filter="url(#shadow)"/>
+
+  <!-- Header Bar inside Card -->
+  <g transform="translate(120, 100)">
+    <!-- Brand Icon -->
+    <rect width="48" height="48" rx="14" fill="url(#blueGrad)"/>
+    <path d="M16 18 h8 l3 3.5 h11 v14 H16 Z" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linejoin="round"/>
+    <path d="M22 28 l-3 3 3 3 M28 28 l3 3 -3 3" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- Title & Subtitle -->
+    <text x="68" y="28" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="28" font-weight="700" fill="#1d1d1f" letter-spacing="-0.5">Project Hub</text>
+    <text x="68" y="46" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" font-size="14" font-weight="500" fill="#86868b">Web Project Showcase &amp; Live Bookmark Directory</text>
+
+    <!-- Top Badge -->
+    <rect x="730" y="8" width="110" height="32" rx="16" fill="#e8e8ed" fill-opacity="0.8"/>
+    <text x="785" y="29" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" font-size="12" font-weight="600" fill="#515154">PRO EDITION</text>
+  </g>
+
+  <!-- Hero Content Headline -->
+  <text x="120" y="220" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="44" font-weight="800" fill="#1d1d1f" letter-spacing="-1">Curated Web Creations &amp; Tools</text>
+  <text x="120" y="255" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" font-size="18" font-weight="400" fill="#6e6e73">Instant live website screenshot previews, smart categorization, and fast launching.</text>
+
+  <!-- Mock Project Cards Row -->
+  <g transform="translate(120, 290)">
+    <!-- Card 1 -->
+    <g transform="translate(0, 0)" filter="url(#subtleShadow)">
+      <rect width="280" height="190" rx="20" fill="#ffffff" stroke="#000000" stroke-opacity="0.08" stroke-width="1"/>
+      <rect width="280" height="105" rx="20" fill="#f2f2f7"/>
+      <!-- Thumbnail mock content -->
+      <circle cx="140" cy="52" r="24" fill="#0071e3" fill-opacity="0.15"/>
+      <path d="M132 52 l6 6 10 -10" fill="none" stroke="#0071e3" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      
+      <rect x="16" y="120" width="160" height="14" rx="4" fill="#1d1d1f"/>
+      <rect x="16" y="142" width="220" height="10" rx="3" fill="#86868b"/>
+      
+      <!-- Pill -->
+      <rect x="16" y="160" width="65" height="18" rx="9" fill="#0071e3" fill-opacity="0.1"/>
+      <text x="48" y="173" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#0071e3">Web App</text>
+    </g>
+
+    <!-- Card 2 -->
+    <g transform="translate(300, 0)" filter="url(#subtleShadow)">
+      <rect width="280" height="190" rx="20" fill="#ffffff" stroke="#000000" stroke-opacity="0.08" stroke-width="1"/>
+      <rect width="280" height="105" rx="20" fill="#f2f2f7"/>
+      <!-- Thumbnail mock content -->
+      <rect x="100" y="32" width="80" height="42" rx="8" fill="#1d1d1f"/>
+      <circle cx="140" cy="53" r="12" fill="#34c759"/>
+
+      <rect x="16" y="120" width="140" height="14" rx="4" fill="#1d1d1f"/>
+      <rect x="16" y="142" width="200" height="10" rx="3" fill="#86868b"/>
+
+      <!-- Pill -->
+      <rect x="16" y="160" width="60" height="18" rx="9" fill="#af52de" fill-opacity="0.1"/>
+      <text x="46" y="173" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#af52de">Design</text>
+    </g>
+
+    <!-- Card 3 -->
+    <g transform="translate(600, 0)" filter="url(#subtleShadow)">
+      <rect width="240" height="190" rx="20" fill="#ffffff" stroke="#000000" stroke-opacity="0.08" stroke-width="1"/>
+      <rect width="240" height="105" rx="20" fill="#f2f2f7"/>
+      <!-- Thumbnail mock content -->
+      <circle cx="120" cy="52" r="20" fill="#ff9500" fill-opacity="0.2"/>
+      <path d="M120 42 v20 M110 52 h20" fill="none" stroke="#ff9500" stroke-width="2.5" stroke-linecap="round"/>
+
+      <rect x="16" y="120" width="130" height="14" rx="4" fill="#1d1d1f"/>
+      <rect x="16" y="142" width="170" height="10" rx="3" fill="#86868b"/>
+
+      <!-- Pill -->
+      <rect x="16" y="160" width="55" height="18" rx="9" fill="#ff9500" fill-opacity="0.1"/>
+      <text x="43" y="173" text-anchor="middle" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" fill="#ff9500">Tool</text>
+    </g>
+  </g>
+
+  <!-- Bottom Brand Footer -->
+  <g transform="translate(120, 520)">
+    <circle cx="6" cy="6" r="4" fill="#34c759"/>
+    <text x="20" y="10" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif" font-size="13" font-weight="600" fill="#515154">Live Screenshot Generator &amp; Fast Launch Directory</text>
+  </g>
+</svg>

@@ -17,6 +17,7 @@ import { AddProjectModal } from './components/AddProjectModal';
 import { SeedDataButton } from './components/SeedDataButton';
 import { PublicShowcaseView } from './components/PublicShowcaseView';
 import { AdminAuthModal } from './components/AdminAuthModal';
+import { OpenGraphModal } from './components/OpenGraphModal';
 import { Toast, ToastMessage } from './components/Toast';
 import { FolderGit2, Plus, Sparkles, Loader2, SearchX } from 'lucide-react';
 
@@ -49,6 +50,7 @@ export default function App() {
   });
   const [isAuthModalOpen, setIsAuthModalOpen] = useState<boolean>(false);
   const [isChangePinMode, setIsChangePinMode] = useState<boolean>(false);
+  const [isOgModalOpen, setIsOgModalOpen] = useState<boolean>(false);
 
   // Toast feedback
   const [toast, setToast] = useState<ToastMessage | null>(null);
@@ -294,6 +296,7 @@ export default function App() {
           projects={projects}
           onOpenProject={handleOpenProject}
           onSwitchToManager={() => handleSwitchMode('manager')}
+          onOpenOgModal={() => setIsOgModalOpen(true)}
         />
         <AdminAuthModal
           isOpen={isAuthModalOpen}
@@ -303,13 +306,18 @@ export default function App() {
           onUpdatePin={handleUpdatePin}
           isChangeMode={isChangePinMode}
         />
+        <OpenGraphModal
+          isOpen={isOgModalOpen}
+          onClose={() => setIsOgModalOpen(false)}
+          showToast={showToast}
+        />
         <Toast toast={toast} onClose={() => setToast(null)} />
       </>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white font-sans antialiased pb-16">
+    <div className="min-h-screen bg-[#f5f5f7] text-[#1d1d1f] font-sans antialiased pb-16">
       {/* Top Bar */}
       <Header
         onOpenAddModal={() => {
@@ -325,6 +333,7 @@ export default function App() {
           setIsAuthModalOpen(true);
         }}
         onLockAdmin={handleLockAdmin}
+        onOpenOgModal={() => setIsOgModalOpen(true)}
       />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
@@ -440,6 +449,13 @@ export default function App() {
         storedPin={adminPin}
         onUpdatePin={handleUpdatePin}
         isChangeMode={isChangePinMode}
+      />
+
+      {/* Open Graph Social Share & Inspector Modal */}
+      <OpenGraphModal
+        isOpen={isOgModalOpen}
+        onClose={() => setIsOgModalOpen(false)}
+        showToast={showToast}
       />
 
       {/* Floating Toast notifications */}

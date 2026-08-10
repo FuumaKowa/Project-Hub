@@ -206,6 +206,26 @@ Respond ONLY with JSON format:
   }
 });
 
+// API endpoint to return active Open Graph Meta Tag details
+app.get('/api/og-metadata', (req, res) => {
+  const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+  const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:3000';
+  const baseUrl = `${protocol}://${host}`;
+
+  res.json({
+    siteName: 'Project Hub',
+    title: 'Project Hub — Curated Web Project Showcase & Directory',
+    description: 'Discover, bookmark, and showcase curated web creations, applications, and tools with automatic live screenshots, category filters, and instant launch redirects.',
+    type: 'website',
+    url: baseUrl,
+    ogImage: `${baseUrl}/og-image.svg`,
+    twitterCard: 'summary_large_image',
+    themeColor: '#f5f5f7',
+    platformsSupported: ['LinkedIn', 'Twitter / X', 'Discord', 'WhatsApp', 'Facebook', 'Slack', 'iMessage'],
+    status: 'active'
+  });
+});
+
 async function startServer() {
   // Vite middleware for development vs static serve for production
   if (process.env.NODE_ENV !== 'production') {
@@ -216,9 +236,26 @@ async function startServer() {
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
+    const fs = await import('fs');
+
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
+      const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+      const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:3000';
+      const baseUrl = `${protocol}://${host}`;
+
+      const indexPath = path.join(distPath, 'index.html');
+      if (fs.existsSync(indexPath)) {
+        let html = fs.readFileSync(indexPath, 'utf-8');
+        // Inject absolute URLs into Open Graph and Twitter image & url tags for strict crawlers (LinkedIn, WhatsApp)
+        html = html
+          .replace(/content="\/og-image\.svg"/g, `content="${baseUrl}/og-image.svg"`)
+          .replace(/content="\/og-canonical-url"/g, `content="${baseUrl}${req.originalUrl}"`);
+        res.setHeader('Content-Type', 'text/html');
+        res.send(html);
+      } else {
+        res.sendFile(indexPath);
+      }
     });
   }
 

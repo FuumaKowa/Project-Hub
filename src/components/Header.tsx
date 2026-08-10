@@ -1,5 +1,5 @@
 import React from 'react';
-import { Plus, FolderGit2, Eye, LayoutGrid, KeyRound, LogOut } from 'lucide-react';
+import { Plus, FolderGit2, Eye, LayoutGrid, KeyRound, LogOut, Share2 } from 'lucide-react';
 
 interface HeaderProps {
   onOpenAddModal: () => void;
@@ -8,6 +8,7 @@ interface HeaderProps {
   onModeChange: (mode: 'manager' | 'showcase') => void;
   onOpenSecuritySettings?: () => void;
   onLockAdmin?: () => void;
+  onOpenOgModal?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -17,6 +18,7 @@ export const Header: React.FC<HeaderProps> = ({
   onModeChange,
   onOpenSecuritySettings,
   onLockAdmin,
+  onOpenOgModal,
 }) => {
   return (
     <header className="apple-glass sticky top-0 z-30 border-b border-black/[0.08] transition-colors">
@@ -67,6 +69,17 @@ export const Header: React.FC<HeaderProps> = ({
               <span>Public Showcase</span>
             </button>
           </div>
+
+          {/* Open Graph Social Share Preview Button */}
+          {onOpenOgModal && (
+            <button
+              onClick={onOpenOgModal}
+              title="Open Graph Social Link Preview"
+              className="p-2 bg-white hover:bg-[#f2f2f7] text-[#515154] hover:text-[#1d1d1f] border border-black/[0.08] rounded-full shadow-xs transition-colors cursor-pointer"
+            >
+              <Share2 className="w-4 h-4 text-[#0071e3]" />
+            </button>
+          )}
 
           {currentMode === 'manager' && onOpenSecuritySettings && (
             <button
