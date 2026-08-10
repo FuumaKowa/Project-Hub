@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ShieldCheck, Lock, KeyRound, Eye, EyeOff, AlertCircle, X, Check, HelpCircle } from 'lucide-react';
+import { ShieldCheck, Lock, KeyRound, Eye, EyeOff, AlertCircle, X, Check } from 'lucide-react';
 
 interface AdminAuthModalProps {
   isOpen: boolean;
@@ -23,7 +23,6 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
   const [showPin, setShowPin] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [shake, setShake] = useState(false);
-  const [showHint, setShowHint] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -130,7 +129,7 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
                 type={showPin ? 'text' : 'password'}
                 value={pinInput}
                 onChange={(e) => setPinInput(e.target.value)}
-                placeholder="Enter PIN (Default: 8888)"
+                placeholder="Enter PIN"
                 autoFocus
                 className="w-full px-4 py-3 bg-[#f2f2f7] border border-black/[0.08] focus:border-[#0071e3] rounded-2xl text-base text-[#1d1d1f] placeholder-[#86868b] tracking-widest focus:outline-none transition-all"
               />
@@ -172,30 +171,6 @@ export const AdminAuthModal: React.FC<AdminAuthModalProps> = ({
               </button>
             ))}
           </div>
-
-          {/* Secret URL Shortcut Hint Toggle */}
-          {!isChangeMode && (
-            <div className="pt-1">
-              <button
-                type="button"
-                onClick={() => setShowHint(!showHint)}
-                className="text-[11px] text-[#0071e3] hover:underline flex items-center space-x-1 cursor-pointer font-medium"
-              >
-                <HelpCircle className="w-3.5 h-3.5" />
-                <span>How to bypass PIN with secret link?</span>
-              </button>
-
-              {showHint && (
-                <div className="mt-2 p-3 bg-[#f2f2f7] rounded-2xl border border-black/[0.08] text-[11px] text-[#515154] space-y-1">
-                  <p className="text-[#1d1d1f] font-semibold">Secret Direct Link Access:</p>
-                  <p>You can bypass this prompt directly by adding your PIN to the URL:</p>
-                  <code className="block p-1.5 bg-white border border-black/[0.08] rounded-xl text-[#0071e3] break-all select-all font-mono">
-                    {window.location.origin}?pin={storedPin}
-                  </code>
-                </div>
-              )}
-            </div>
-          )}
 
           {/* Submit Action */}
           <div className="pt-4 border-t border-black/[0.08] flex items-center justify-end space-x-2">

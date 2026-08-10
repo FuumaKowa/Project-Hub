@@ -70,7 +70,7 @@ export default function App() {
       sessionStorage.setItem('admin_authenticated', 'true');
       setIsAdminAuth(true);
       setViewMode('manager');
-      showToast('Unlocked via secret URL parameter!', 'success');
+      showToast('Unlocked admin session!', 'success');
       return;
     }
 
