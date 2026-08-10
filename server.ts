@@ -206,6 +206,18 @@ Respond ONLY with JSON format:
   }
 });
 
+// Serve static public assets explicitly with correct headers
+app.use(express.static(path.join(process.cwd(), 'public'), {
+  maxAge: '1d',
+  setHeaders: (res, filePath) => {
+    if (filePath.endsWith('.png')) {
+      res.setHeader('Content-Type', 'image/png');
+    } else if (filePath.endsWith('.svg')) {
+      res.setHeader('Content-Type', 'image/svg+xml');
+    }
+  }
+}));
+
 // API endpoint to return active Open Graph Meta Tag details
 app.get('/api/og-metadata', (req, res) => {
   const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
@@ -218,7 +230,7 @@ app.get('/api/og-metadata', (req, res) => {
     description: 'Discover, bookmark, and showcase curated web creations, applications, and tools with automatic live screenshots, category filters, and instant launch redirects.',
     type: 'website',
     url: baseUrl,
-    ogImage: `${baseUrl}/og-image.svg`,
+    ogImage: `${baseUrl}/og-image.png`,
     twitterCard: 'summary_large_image',
     themeColor: '#f5f5f7',
     platformsSupported: ['LinkedIn', 'Twitter / X', 'Discord', 'WhatsApp', 'Facebook', 'Slack', 'iMessage'],
@@ -227,17 +239,44 @@ app.get('/api/og-metadata', (req, res) => {
 });
 
 async function startServer() {
+  const fs = await import('fs');
+
   // Vite middleware for development vs static serve for production
   if (process.env.NODE_ENV !== 'production') {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
     });
+
+    // Custom middleware to inject absolute OG image URLs for social crawlers in development
+    app.use(async (req, res, next) => {
+      const userAgent = (req.headers['user-agent'] || '').toLowerCase();
+      const isCrawler = /linkedinbot|whatsapp|twitterbot|facebookexternalhit|discordbot|telegrambot|slackbot|applebot/i.test(userAgent);
+
+      if (isCrawler && req.accepts('html') && !req.path.includes('.') && !req.path.startsWith('/api')) {
+        const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
+        const host = req.headers['x-forwarded-host'] || req.headers.host || 'localhost:3000';
+        const baseUrl = `${protocol}://${host}`;
+
+        const rawIndexPath = path.join(process.cwd(), 'index.html');
+        if (fs.existsSync(rawIndexPath)) {
+          let html = fs.readFileSync(rawIndexPath, 'utf-8');
+          html = await vite.transformIndexHtml(req.originalUrl, html);
+          html = html
+            .replace(/content="\/og-image\.png"/g, `content="${baseUrl}/og-image.png"`)
+            .replace(/content="\/og-image\.svg"/g, `content="${baseUrl}/og-image.png"`)
+            .replace(/<head>/i, `<head>\n    <meta property="og:url" content="${baseUrl}${req.originalUrl}" />`);
+
+          res.setHeader('Content-Type', 'text/html; charset=utf-8');
+          return res.send(html);
+        }
+      }
+      next();
+    });
+
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
-    const fs = await import('fs');
-
     app.use(express.static(distPath));
     app.get('*', (req, res) => {
       const protocol = req.headers['x-forwarded-proto'] || req.protocol || 'https';
@@ -247,11 +286,11 @@ async function startServer() {
       const indexPath = path.join(distPath, 'index.html');
       if (fs.existsSync(indexPath)) {
         let html = fs.readFileSync(indexPath, 'utf-8');
-        // Inject absolute URLs into Open Graph and Twitter image & url tags for strict crawlers (LinkedIn, WhatsApp)
         html = html
-          .replace(/content="\/og-image\.svg"/g, `content="${baseUrl}/og-image.svg"`)
-          .replace(/content="\/og-canonical-url"/g, `content="${baseUrl}${req.originalUrl}"`);
-        res.setHeader('Content-Type', 'text/html');
+          .replace(/content="\/og-image\.png"/g, `content="${baseUrl}/og-image.png"`)
+          .replace(/content="\/og-image\.svg"/g, `content="${baseUrl}/og-image.png"`)
+          .replace(/<head>/i, `<head>\n    <meta property="og:url" content="${baseUrl}${req.originalUrl}" />`);
+        res.setHeader('Content-Type', 'text/html; charset=utf-8');
         res.send(html);
       } else {
         res.sendFile(indexPath);

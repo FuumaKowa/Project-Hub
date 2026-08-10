@@ -33,7 +33,7 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
   const [serverOg, setServerOg] = useState<any>(null);
 
   const baseUrl = window.location.origin;
-  const ogImageFull = `${baseUrl}/og-image.svg`;
+  const ogImageFull = `${baseUrl}/og-image.png`;
   const siteTitle = 'Project Hub — Curated Web Project Showcase & Directory';
   const siteDesc = 'Discover, bookmark, and showcase curated web creations, applications, and tools with automatic live screenshots, category filters, and instant launch redirects.';
 
@@ -54,6 +54,7 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
 <meta property="og:title" content="${siteTitle}" />
 <meta property="og:description" content="${siteDesc}" />
 <meta property="og:image" content="${ogImageFull}" />
+<meta property="og:image:type" content="image/png" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 
@@ -179,7 +180,7 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
                   Explore curated web projects, tools, and portfolios with live screenshot previews! 🚀
                 </div>
                 <div className="relative border-t border-black/[0.08]">
-                  <img src="/og-image.svg" alt="LinkedIn OG Preview" className="w-full aspect-[1.91/1] object-cover" />
+                  <img src="/og-image.png" alt="LinkedIn OG Preview" className="w-full aspect-[1.91/1] object-cover" />
                   <div className="p-3 bg-[#f3f6f8] border-t border-black/[0.06]">
                     <p className="text-xs font-semibold text-[#1d1d1f] line-clamp-1">{siteTitle}</p>
                     <p className="text-[11px] text-[#515154] truncate mt-0.5">{baseUrl.replace(/^https?:\/\//, '')}</p>
@@ -204,7 +205,7 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
                   Discover, bookmark, and showcase curated web creations with instant screenshot previews:
                 </p>
                 <div className="rounded-2xl overflow-hidden border border-neutral-800 bg-[#161616]">
-                  <img src="/og-image.svg" alt="Twitter Card Preview" className="w-full aspect-[1.91/1] object-cover" />
+                  <img src="/og-image.png" alt="Twitter Card Preview" className="w-full aspect-[1.91/1] object-cover" />
                   <div className="p-3">
                     <p className="text-[11px] text-neutral-400 uppercase tracking-wider">{baseUrl.replace(/^https?:\/\//, '')}</p>
                     <p className="text-xs font-bold text-white line-clamp-1 mt-0.5">{siteTitle}</p>
@@ -226,7 +227,7 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
                   <p className="text-xs font-semibold text-[#00a8fc] uppercase tracking-wide">Project Hub</p>
                   <p className="text-xs font-bold text-white leading-snug">{siteTitle}</p>
                   <p className="text-[11px] text-[#dbdee1] leading-relaxed">{siteDesc}</p>
-                  <img src="/og-image.svg" alt="Discord Embed Preview" className="w-full rounded-lg aspect-[1.91/1] object-cover" />
+                  <img src="/og-image.png" alt="Discord Embed Preview" className="w-full rounded-lg aspect-[1.91/1] object-cover" />
                 </div>
               </div>
             )}
@@ -236,7 +237,7 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
               <div className="max-w-md mx-auto bg-[#efeae2] p-4 rounded-2xl shadow-md">
                 <div className="ml-auto max-w-[85%] bg-[#d9fdd3] rounded-2xl rounded-tr-none p-2.5 shadow-xs border border-[#b2e5a8]">
                   <div className="bg-[#c2ebbe] rounded-xl overflow-hidden mb-1.5 p-2">
-                    <img src="/og-image.svg" alt="WhatsApp Link Preview" className="w-full aspect-[1.91/1] rounded-lg object-cover mb-2" />
+                    <img src="/og-image.png" alt="WhatsApp Link Preview" className="w-full aspect-[1.91/1] rounded-lg object-cover mb-2" />
                     <p className="text-xs font-bold text-[#111b21] line-clamp-1">{siteTitle}</p>
                     <p className="text-[11px] text-[#3b4a54] line-clamp-2 mt-0.5">{siteDesc}</p>
                     <p className="text-[10px] text-[#667781] mt-1 truncate">{baseUrl}</p>
@@ -260,10 +261,10 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
 
             <div className="p-3 bg-[#f2f2f7] rounded-2xl border border-black/[0.08] flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold text-[#1d1d1f]">og:image (1200 x 630)</p>
-                <p className="text-[11px] text-[#86868b] truncate max-w-[220px]">/og-image.svg</p>
+                <p className="text-xs font-semibold text-[#1d1d1f]">og:image (1200 x 630 PNG)</p>
+                <p className="text-[11px] text-[#86868b] truncate max-w-[220px]">/og-image.png</p>
               </div>
-              <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-100 text-emerald-800 rounded-full">1200x630</span>
+              <span className="px-2 py-0.5 text-[10px] font-semibold bg-emerald-100 text-emerald-800 rounded-full">1200x630 PNG</span>
             </div>
 
             <div className="p-3 bg-[#f2f2f7] rounded-2xl border border-black/[0.08] flex items-center justify-between">
