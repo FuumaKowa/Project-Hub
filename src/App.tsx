@@ -15,7 +15,7 @@ import { FilterBar } from './components/FilterBar';
 import { ProjectCard } from './components/ProjectCard';
 import { AddProjectModal } from './components/AddProjectModal';
 import { SeedDataButton } from './components/SeedDataButton';
-import { PublicShowcaseView } from './components/PublicShowcaseView';
+import { PublicShowcaseView } from './components/LiteraryPortfolio';
 import { AdminAuthModal } from './components/AdminAuthModal';
 import { OpenGraphModal } from './components/OpenGraphModal';
 import { Toast, ToastMessage } from './components/Toast';
@@ -35,6 +35,7 @@ const CATEGORIES: CategoryFilter[] = [
 export default function App() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
+  const [projectLoadError, setProjectLoadError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<'manager' | 'showcase'>('showcase');
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
@@ -132,13 +133,16 @@ export default function App() {
   // Real-time Firestore sync
   useEffect(() => {
     setLoading(true);
+    setProjectLoadError(null);
     const unsubscribe = subscribeToProjects(
       (updatedProjects) => {
         setProjects(updatedProjects);
+        setProjectLoadError(null);
         setLoading(false);
       },
       (err) => {
         console.error('Firestore listener error:', err);
+        setProjectLoadError('Please check your connection and try again.');
         setLoading(false);
         showToast('Connected in offline mode or error reading Firestore', 'info');
       }
@@ -294,6 +298,8 @@ export default function App() {
       <>
         <PublicShowcaseView
           projects={projects}
+          loading={loading}
+          loadError={projectLoadError}
           onOpenProject={handleOpenProject}
           onSwitchToManager={() => handleSwitchMode('manager')}
           onOpenOgModal={() => setIsOgModalOpen(true)}

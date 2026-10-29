@@ -1,5 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <rect width="100" height="100" rx="24" fill="#0071e3" />
-  <path d="M22 28 h20 l6 7 h30 v33 H22 Z" fill="none" stroke="#ffffff" stroke-width="5" stroke-linejoin="round" />
-  <path d="M41 51 l-6 6 6 6 M59 51 l6 6 -6 6" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <title>Niel Studios</title>
+  <rect width="64" height="64" rx="5" fill="#f4f0e6" />
+  <g transform="rotate(-8 32 32)">
+    <rect x="10" y="10" width="44" height="44" fill="none" stroke="#292c26" stroke-width="1.8" />
+    <text x="32" y="46" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="47" fill="#a83f2e">n</text>
+  </g>
 </svg>
