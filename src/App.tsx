@@ -17,6 +17,7 @@ import { ProjectCard } from './components/ProjectCard';
 import { AddProjectModal } from './components/AddProjectModal';
 import { SeedDataButton } from './components/SeedDataButton';
 import { PublicShowcaseView } from './components/LiteraryPortfolio';
+import { EditorialPortfolio } from './components/EditorialPortfolio';
 import { AdminAuthModal } from './components/AdminAuthModal';
 import { OpenGraphModal } from './components/OpenGraphModal';
 import { Toast, ToastMessage } from './components/Toast';
@@ -38,7 +39,7 @@ export default function App() {
   useEffect(() => {
     document.title = site.title;
     document.querySelector('meta[name="description"]')?.setAttribute('content', site.description);
-    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#f4f0e6');
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', site.themeColor);
   }, [site]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
@@ -301,9 +302,10 @@ export default function App() {
 
   // If user selected Public Showcase Mode
   if (viewMode === 'showcase') {
+    const PublicView = site.kind === 'portfolio' ? EditorialPortfolio : PublicShowcaseView;
     return (
       <>
-        <PublicShowcaseView
+        <PublicView
           variant={site.kind}
           projects={projects}
           loading={loading}

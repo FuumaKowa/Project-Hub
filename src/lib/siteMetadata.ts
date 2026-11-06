@@ -6,7 +6,8 @@ export function rewriteSiteMetadata(html: string, site: ReturnType<typeof resolv
   const values: Record<string, string> = {
     title: site.title, description: site.description, author: 'Niel Studios',
     keywords: site.kind === 'hub' ? 'Niel Studios, projects, websites, applications, tools' : 'Niel Studios, portfolio, design, development, literature',
-    'theme-color': '#f4f0e6', 'apple-mobile-web-app-title': site.name,
+    'theme-color': site.themeColor, 'apple-mobile-web-app-title': site.name,
+    'og:image': site.image, 'og:image:secure_url': site.image, 'twitter:image': site.image,
     'og:title': site.title, 'og:description': site.description, 'og:site_name': site.name,
     'og:image:alt': site.title, 'twitter:title': site.title,
     'twitter:description': site.description, 'twitter:image:alt': site.title,

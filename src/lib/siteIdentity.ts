@@ -6,6 +6,8 @@ const identities = {
     url: 'https://hub.nielstudios.com/',
     title: 'Project Hub — Niel Studios',
     name: 'Project Hub',
+    image: 'https://hub.nielstudios.com/og-image.png',
+    themeColor: '#f4f0e6',
     description: 'Browse the Niel Studios project directory: websites, applications, and useful tools. Search by name, category, or tag and explore each live project.',
   },
   portfolio: {
@@ -13,6 +15,8 @@ const identities = {
     url: 'https://me.nielstudios.com/',
     title: 'Niel Studios — Between Words & Worlds',
     name: 'Niel Studios',
+    image: 'https://me.nielstudios.com/og-image.png',
+    themeColor: '#eee7db',
     description: 'The personal portfolio of Niel Studios. Thoughtful design, development, selected work, and a wider perspective through literature and poetry.',
   },
 };

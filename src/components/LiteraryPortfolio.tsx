@@ -4,7 +4,7 @@ import { Project } from '../types';
 import './portfolio.css';
 import './portfolio-live.css';
 
-interface PublicShowcaseViewProps {
+export interface PublicShowcaseViewProps {
   variant?: 'portfolio' | 'hub';
   projects: Project[];
   onOpenProject: (project: Project) => void;
@@ -15,7 +15,7 @@ interface PublicShowcaseViewProps {
   loadError?: string | null;
 }
 
-function ProjectPreview({ project }: { project: Project }) {
+export function ProjectPreview({ project }: { project: Project }) {
   const [attempt, setAttempt] = useState(0);
   const fallback = `https://s.wordpress.com/mshots/v1/${encodeURIComponent(project.url)}?w=1280&h=800`;
   const source = attempt === 0 ? project.thumbnailUrl || fallback : fallback;

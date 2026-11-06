@@ -33,7 +33,7 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
   const [copiedMeta, setCopiedMeta] = useState(false);
   const site = resolveSite(new URL(window.location.href));
   const baseUrl = site.url.replace(/\/$/, '');
-  const ogImageFull = `${baseUrl}/og-image.png`;
+  const ogImageFull = site.image;
   const siteTitle = site.title;
   const siteDesc = site.description;
 
