@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Project, CategoryFilter } from './types';
+import { resolveSite } from './lib/siteIdentity';
 import {
   subscribeToProjects,
   addProject,
@@ -33,6 +34,12 @@ const CATEGORIES: CategoryFilter[] = [
 ];
 
 export default function App() {
+  const site = useMemo(() => resolveSite(new URL(window.location.href)), []);
+  useEffect(() => {
+    document.title = site.title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', site.description);
+    document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#f4f0e6');
+  }, [site]);
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [projectLoadError, setProjectLoadError] = useState<string | null>(null);
@@ -297,11 +304,14 @@ export default function App() {
     return (
       <>
         <PublicShowcaseView
+          variant={site.kind}
           projects={projects}
           loading={loading}
           loadError={projectLoadError}
           onOpenProject={handleOpenProject}
-          onSwitchToManager={() => handleSwitchMode('manager')}
+          onSwitchToManager={() => site.kind === 'portfolio'
+            ? window.location.assign('https://hub.nielstudios.com/?view=manager')
+            : handleSwitchMode('manager')}
           onOpenOgModal={() => setIsOgModalOpen(true)}
         />
         <AdminAuthModal

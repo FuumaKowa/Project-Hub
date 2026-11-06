@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { resolveSite } from '../lib/siteIdentity';
 import {
   Share2,
   X,
@@ -30,27 +31,17 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
   const [activePlatform, setActivePlatform] = useState<'linkedin' | 'twitter' | 'discord' | 'whatsapp'>('linkedin');
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedMeta, setCopiedMeta] = useState(false);
-  const [serverOg, setServerOg] = useState<any>(null);
-
-  const baseUrl = window.location.origin;
+  const site = resolveSite(new URL(window.location.href));
+  const baseUrl = site.url.replace(/\/$/, '');
   const ogImageFull = `${baseUrl}/og-image.png`;
-  const siteTitle = 'Project Hub — Curated Web Project Showcase & Directory';
-  const siteDesc = 'Discover, bookmark, and showcase curated web creations, applications, and tools with automatic live screenshots, category filters, and instant launch redirects.';
-
-  useEffect(() => {
-    if (isOpen) {
-      fetch('/api/og-metadata')
-        .then((res) => res.json())
-        .then((data) => setServerOg(data))
-        .catch((err) => console.log('OG Metadata fetch error:', err));
-    }
-  }, [isOpen]);
+  const siteTitle = site.title;
+  const siteDesc = site.description;
 
   if (!isOpen) return null;
 
   const metaHtmlSnippet = `<!-- Open Graph Meta Tags (LinkedIn, Twitter, WhatsApp, Discord) -->
 <meta property="og:type" content="website" />
-<meta property="og:site_name" content="Project Hub" />
+<meta property="og:site_name" content="${site.name}" />
 <meta property="og:title" content="${siteTitle}" />
 <meta property="og:description" content="${siteDesc}" />
 <meta property="og:image" content="${ogImageFull}" />
@@ -96,7 +87,7 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
                 </span>
               </h3>
               <p className="text-xs text-[#86868b]">
-                Preview how Project Hub appears on LinkedIn, Twitter, Discord, and WhatsApp
+                Preview how {site.name} appears on LinkedIn, Twitter, Discord, and WhatsApp
               </p>
             </div>
           </div>
@@ -172,7 +163,7 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
                     PH
                   </div>
                   <div>
-                    <p className="text-xs font-bold text-[#1d1d1f]">Project Hub</p>
+                    <p className="text-xs font-bold text-[#1d1d1f]">{site.name}</p>
                     <p className="text-[10px] text-[#86868b]">Web Bookmark Showcase • Now</p>
                   </div>
                 </div>
@@ -197,7 +188,7 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
                     PH
                   </div>
                   <div>
-                    <span className="text-xs font-bold">Project Hub</span>
+                    <span className="text-xs font-bold">{site.name}</span>
                     <span className="text-xs text-neutral-400 ml-1.5">@ProjectHub • 1m</span>
                   </div>
                 </div>
@@ -224,7 +215,7 @@ export const OpenGraphModal: React.FC<OpenGraphModalProps> = ({
                 </div>
                 <p className="text-xs text-[#b5bac1] mb-2">{baseUrl}</p>
                 <div className="border-l-4 border-[#0071e3] bg-[#2b2d31] rounded-r-xl p-3 space-y-2">
-                  <p className="text-xs font-semibold text-[#00a8fc] uppercase tracking-wide">Project Hub</p>
+                  <p className="text-xs font-semibold text-[#00a8fc] uppercase tracking-wide">{site.name}</p>
                   <p className="text-xs font-bold text-white leading-snug">{siteTitle}</p>
                   <p className="text-[11px] text-[#dbdee1] leading-relaxed">{siteDesc}</p>
                   <img src="/og-image.png" alt="Discord Embed Preview" className="w-full rounded-lg aspect-[1.91/1] object-cover" />
