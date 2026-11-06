@@ -7,9 +7,13 @@ import './editorial-portfolio.css';
 
 const contents = [{href:'#work',number:'01',label:'The work'}, {href:'#words',number:'02',label:'In the margins'}, {href:'#about',number:'03',label:'The person'}, {href:'#fragments',number:'04',label:'Fragments'}];
 const portraits = [
-  {src:'/images/niel-red-cutout.webp',alt:'Niel leaning forward in a burgundy shirt, with one hand resting in his hair',caption:'A study in warm light.',cutout:true},
-  {src:'/images/niel-glasses.webp',alt:'Niel wearing black glasses and a grey hoodie in warm afternoon light',caption:'An ordinary afternoon.',cutout:false},
-  {src:'/images/niel-knit.webp',alt:'Niel in a grey knit sweater, standing beside a mirror and dark curtain',caption:'A quieter frame.',cutout:false},
+  {src:'/images/collection-01.webp',width:462,height:1000,alt:'Niel taking a mirror photo in a grey knit sweater beside a dark curtain',caption:'A quieter frame.',format:'portrait'},
+  {src:'/images/collection-02.webp',width:563,height:1000,alt:'Niel wearing black glasses, a grey hoodie and a backpack',caption:'An ordinary afternoon.',format:'portrait'},
+  {src:'/images/collection-07.webp',width:563,height:1000,alt:'Niel taking a mirror photo in a burgundy shirt with one hand in his hair',caption:'A study in warm light.',format:'portrait'},
+  {src:'/images/collection-03.webp',width:1120,height:760,alt:'Two people posing playfully in playful headbands against a pink photo-booth background',caption:'A little playfulness.',format:'landscape'},
+  {src:'/images/collection-04.webp',width:1120,height:747,alt:'Two people smiling, one making a peace sign, against a pink photo-booth background',caption:'A shared frame.',format:'landscape'},
+  {src:'/images/collection-05.webp',width:1120,height:760,alt:'Two people making a heart shape with their hands against a pink photo-booth background',caption:'A small moment.',format:'landscape'},
+  {src:'/images/collection-06.webp',width:1120,height:747,alt:'Two people standing together and smiling against a pink photo-booth background',caption:'One more for the album.',format:'landscape'},
 ];
 function projectHost(url: string) {try{return new URL(url).hostname.replace(/^www\./,'');}catch{return 'Live project';}}
 
@@ -23,7 +27,7 @@ function Portrait({ sketches }: { sketches: boolean }) {
       <g stroke="currentColor" strokeLinecap="round"><ellipse cx="250" cy="310" rx="163" ry="230" transform="rotate(13 250 310)" strokeWidth=".9" /><path d="M93 153C88 70 404 67 423 295S161 566 79 465" strokeWidth=".55" opacity=".65" /><path d="M60 95h30m-15-15v30M410 520h30m-15-15v30M33 378l91-50M365 185l74-32M67 584l352-2" strokeWidth=".9" /><path d="M66 151L439 462M55 477L417 68" strokeWidth=".6" strokeDasharray="3 6" opacity=".4" /></g>
     </svg>
     <span className="ed-hand ed-note-one">a work in progress.</span>
-    <img className="ed-cutout" src="/images/niel-editorial.webp" width="1024" height="1536" alt="Niel in a tobacco-brown jacket, black shirt and dark trousers" fetchPriority="high" decoding="async" />
+    <img className="ed-cover-photograph" src="/images/collection-08.webp" width="874" height="1280" alt="Niel taking a full-length mirror photo in a brown jacket and dark trousers in a warmly lit room" fetchPriority="high" decoding="async" />
     <span className="ed-hand ed-note-two">the person<br />behind the pixels.</span>
     <span className="ed-portrait-edge ed-mono" aria-hidden="true">Design / Code / Curiosity</span>
     <figcaption><span className="ed-mono">Fig. 001 — Niel</span><span className="ed-hand">An unfinished practice.</span></figcaption>
@@ -91,11 +95,14 @@ export function EditorialPortfolio({projects,onOpenProject,onSwitchToManager,onO
 
         <section className="ed-section ed-about" id="about" aria-labelledby="ed-about-heading"><span className="ed-mono">03 / The person</span><div><h2 id="ed-about-heading">A little curiosity,<br /><em>beyond the work.</em></h2><p className="ed-lead">I build for the people on the other side of the screen.</p><p>Between projects: literature, poetry, and a few rounds of Valorant. Different ways of noticing, thinking, and staying curious.</p><a href="https://github.com/FuumaKowa" target="_blank" rel="noopener noreferrer" className="ed-text-link">More on GitHub <ArrowUpRight size={16}/></a></div><aside className="ed-field-notes"><span className="ed-mono">Field notes</span><div><span>01</span><p>Notice the details.</p></div><div><span>02</span><p>Make something useful.</p></div><div><span>03</span><p>Keep a little wonder.</p></div><span className="ed-hand">a practice, not a finish line.</span></aside></section>
 
-        <section className="ed-section ed-fragments" id="fragments" aria-labelledby="ed-fragments-heading"><div className="ed-section-heading"><span className="ed-mono">04 / A few frames</span><h2 id="ed-fragments-heading">Different days.<br /><em>The same curiosity.</em></h2><span className="ed-hand">a little more human.</span></div><div className="ed-contact-sheet">{portraits.map((portrait,i)=><figure className={`ed-photo ed-photo-${i}${portrait.cutout ? ' ed-photo-cutout' : ''}`} key={portrait.src}><button type="button" onClick={()=>{setPortraitIndex(i);lightbox.current?.showModal();}} aria-label={`View portrait ${i+1}: ${portrait.caption}`}><img src={portrait.src} alt={portrait.alt} width="960" height="1280" loading="lazy" decoding="async"/><span className="ed-photo-expand" aria-hidden="true"><Plus size={18}/></span></button><figcaption><span className="ed-mono">Fig. {String(i+2).padStart(3,'0')}</span><span className="ed-hand">{portrait.caption}</span></figcaption></figure>)}</div><p className="ed-photo-note ed-mono">Small moments / A personal contact sheet</p></section>
+        <section className="ed-section ed-fragments" id="fragments" aria-labelledby="ed-fragments-heading"><div className="ed-section-heading"><span className="ed-mono">04 / A few frames</span><h2 id="ed-fragments-heading">Different days.<br /><em>The same curiosity.</em></h2><span className="ed-hand">a little more human.</span></div><div className="ed-contact-sheet">{portraits.map((portrait,i)=><figure className={`ed-photo ed-photo-${i}${portrait.format === 'landscape' ? ' ed-photo-wide' : ''}`} key={portrait.src}><button type="button" onClick={()=>{setPortraitIndex(i);lightbox.current?.showModal();}} aria-label={`View portrait ${i+1}: ${portrait.caption}`}><img src={portrait.src} alt={portrait.alt} width={portrait.width} height={portrait.height} style={{aspectRatio: `${portrait.width} / ${portrait.height}`}} loading="lazy" decoding="async"/><span className="ed-photo-expand" aria-hidden="true"><Plus size={18}/></span></button><figcaption><span className="ed-mono">Fig. {String(i+2).padStart(3,'0')}</span><span className="ed-hand">{portrait.caption}</span></figcaption></figure>)}</div><p className="ed-photo-note ed-mono">Small moments / A personal contact sheet</p></section>
         <footer className="ed-contact" id="contact"><span className="ed-mono">A conversation is a beginning.</span><div className="ed-contact-main"><h2>Leave a <em>note.</em></h2><div><p>For an idea, a collaboration,<br />or a simple hello.</p><a href="https://github.com/FuumaKowa" target="_blank" rel="noopener noreferrer" className="ed-text-link">Find me on GitHub <ArrowUpRight size={18}/></a></div></div><div className="ed-footer-meta"><span className="ed-mono">Niel Studios / A personal collection</span><a className="ed-mono" href="https://hub.nielstudios.com/">Project Hub <ArrowUpRight size={12}/></a><div>{onOpenOgModal && <button type="button" onClick={onOpenOgModal}>Share & preview</button>}{showAdminToggle && onSwitchToManager && <button type="button" onClick={onSwitchToManager}><Shield size={11}/>Admin Manager</button>}</div><a href="#top" className="ed-mono">Back to top ↑</a></div></footer>
       </main>
     </div>
     <dialog className="ed-lightbox" ref={lightbox} aria-label="Portrait viewer" onClick={event=>{if(event.target===event.currentTarget)lightbox.current?.close();}}><button type="button" className="ed-lightbox-close" onClick={()=>lightbox.current?.close()} aria-label="Close portrait viewer"><X size={20}/></button><img src={portraits[portraitIndex].src} alt={portraits[portraitIndex].alt}/><p className="ed-hand">{portraits[portraitIndex].caption}</p></dialog>
   </div>;
 }
+
+
+
 
