@@ -15,7 +15,7 @@ const identities = {
     url: 'https://me.nielstudios.com/',
     title: 'Niel Studios — Between Words & Worlds',
     name: 'Niel Studios',
-    image: 'https://me.nielstudios.com/og-image.png',
+    image: 'https://me.nielstudios.com/images/editorial-og.png',
     themeColor: '#eee7db',
     description: 'The personal portfolio of Niel Studios. Thoughtful design, development, selected work, and a wider perspective through literature and poetry.',
   },

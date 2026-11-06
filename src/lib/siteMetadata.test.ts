@@ -13,7 +13,7 @@ for (const host of ['me', 'hub']) {
     assert.ok(output.includes(`property="og:url" content="${site.url}"`));
     assert.ok(output.includes(`rel="canonical" href="${site.url}"`));
     assert.ok(output.includes(site.description));
-    assert.ok(output.includes(`property="og:image" content="${site.url}og-image.png"`));
+    assert.ok(output.includes(`property="og:image" content="${site.url}${site.kind === 'portfolio' ? 'images/editorial-og.png' : 'og-image.png'}"`));
     assert.ok(output.includes(`name="theme-color" content="${site.kind === 'portfolio' ? '#eee7db' : '#f4f0e6'}"`));
     assert.ok(!output.includes('Curated Web Project Showcase'));
     assert.equal(output.split('<body>')[1], template.split('<body>')[1]);
