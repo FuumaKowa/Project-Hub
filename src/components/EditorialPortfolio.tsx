@@ -4,6 +4,7 @@ import type { Project } from '../types';
 import { selectEditorialProjects } from '../lib/editorialProjects';
 import { ProjectPreview, type PublicShowcaseViewProps } from './LiteraryPortfolio';
 import './editorial-portfolio.css';
+import { EditorialOpening } from './EditorialOpening';
 
 const contents = [{href:'#work',number:'01',label:'The work'}, {href:'#words',number:'02',label:'In the margins'}, {href:'#about',number:'03',label:'The person'}, {href:'#fragments',number:'04',label:'Fragments'}];
 const portraits = [
@@ -52,6 +53,7 @@ export function EditorialPortfolio({projects,onOpenProject,onSwitchToManager,onO
   const closeMenu = () => {if(mobileNav.current) mobileNav.current.open=false;};
 
   return <div className={`editorial-site${evening ? ' ed-evening' : ''}`}>
+    <EditorialOpening />
     <a className="ed-skip" href="#ed-main">Skip to content</a>
     <div className="ed-wrap">
       <header className="ed-header">
