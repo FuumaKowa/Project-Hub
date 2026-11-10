@@ -5,6 +5,8 @@ import { selectEditorialProjects } from '../lib/editorialProjects';
 import { ProjectPreview, type PublicShowcaseViewProps } from './LiteraryPortfolio';
 import './editorial-portfolio.css';
 import { EditorialOpening } from './EditorialOpening';
+import { motion, useScroll, useSpring, useReducedMotion } from 'motion/react';
+import './editorial-art-direction.css';
 
 const contents = [{href:'#work',number:'01',label:'The work'}, {href:'#words',number:'02',label:'In the margins'}, {href:'#about',number:'03',label:'The person'}, {href:'#fragments',number:'04',label:'Fragments'}];
 const portraits = [
@@ -28,6 +30,7 @@ function Portrait({ sketches }: { sketches: boolean }) {
       <g stroke="currentColor" strokeLinecap="round"><ellipse cx="250" cy="310" rx="163" ry="230" transform="rotate(13 250 310)" strokeWidth=".9" /><path d="M93 153C88 70 404 67 423 295S161 566 79 465" strokeWidth=".55" opacity=".65" /><path d="M60 95h30m-15-15v30M410 520h30m-15-15v30M33 378l91-50M365 185l74-32M67 584l352-2" strokeWidth=".9" /><path d="M66 151L439 462M55 477L417 68" strokeWidth=".6" strokeDasharray="3 6" opacity=".4" /></g>
     </svg>
     <span className="ed-hand ed-note-one">a work in progress.</span>
+    <a className="ed-cover-seal" href="#about" aria-label="Meet the person behind the work"><svg viewBox="0 0 120 120" aria-hidden="true"><defs><path id="ed-seal-path" d="M60,60m-44,0a44,44 0 1,1 88,0a44,44 0 1,1 -88,0" /></defs><text><textPath href="#ed-seal-path" textLength="276">INDEPENDENT MIND · ONGOING PRACTICE · </textPath></text></svg><ArrowDownRight size={30}/></a>
     <img className="ed-cover-photograph" src="/images/collection-08.webp" width="874" height="1280" alt="Niel taking a full-length mirror photo in a brown jacket and dark trousers in a warmly lit room" fetchPriority="high" decoding="async" />
     <span className="ed-hand ed-note-two">the person<br />behind the pixels.</span>
     <span className="ed-portrait-edge ed-mono" aria-hidden="true">Design / Code / Curiosity</span>
@@ -48,13 +51,35 @@ export function EditorialPortfolio({projects,onOpenProject,onSwitchToManager,onO
   const mobileNav = useRef<HTMLDetailsElement>(null);
   const lightbox = useRef<HTMLDialogElement>(null);
   const [portraitIndex,setPortraitIndex] = useState(0);
+  const [activeChapter,setActiveChapter] = useState('top');
+  const siteRoot = useRef<HTMLDivElement>(null);
+  const reducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: siteRoot, offset: ['start start', 'end end'] });
+  const readingProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
   const {featured,index,total} = useMemo(() => selectEditorialProjects(projects),[projects]);
   useEffect(() => {try {localStorage.setItem('portfolio_palette',evening ? 'evening' : 'paper');}catch {/* Palette remains usable without storage. */}},[evening]);
   const closeMenu = () => {if(mobileNav.current) mobileNav.current.open=false;};
+  useEffect(() => {
+    const sections = siteRoot.current?.querySelectorAll<HTMLElement>('#top, #work, #words, #about, #fragments, #contact');
+    if (!sections || !('IntersectionObserver' in window)) return;
+    let observer: IntersectionObserver;
+    const observeSections = () => {
+      observer?.disconnect();
+      observer = new IntersectionObserver(entries => {
+        for (const entry of entries) if (entry.isIntersecting) setActiveChapter(entry.target.id);
+      }, { rootMargin: `-${window.innerHeight * .15}px 0px -${window.innerHeight * .65}px 0px`, threshold: 0 });
+      sections.forEach(section => observer.observe(section));
+    };
+    observeSections();
+    window.addEventListener('resize', observeSections);
+    return () => { observer.disconnect(); window.removeEventListener('resize', observeSections); };
+  }, []);
 
-  return <div className={`editorial-site${evening ? ' ed-evening' : ''}`}>
+  return <div ref={siteRoot} className={`editorial-site ed-art-directed${evening ? ' ed-evening' : ''}`}>
+    <motion.div className="ed-reading-progress" style={{ scaleX: reducedMotion ? scrollYProgress : readingProgress }} aria-hidden="true" />
     <EditorialOpening />
     <a className="ed-skip" href="#ed-main">Skip to content</a>
+    <nav className="ed-chapter-rail" aria-label="Chapter navigation"><a href="#top" className="ed-rail-mark" aria-label="Back to cover">n.</a>{contents.map(item=><a key={item.href} href={item.href} aria-current={activeChapter === item.href.slice(1) ? 'location' : undefined}><span>{item.number}</span><span className="ed-rail-label">{item.label}</span></a>)}<span className="ed-rail-bottom">An ongoing practice</span></nav>
     <div className="ed-wrap">
       <header className="ed-header">
         <a href="#top" className="ed-brand" aria-label="Niel Studios home"><span aria-hidden="true">n.</span><span>Niel Studios</span></a>
@@ -66,6 +91,7 @@ export function EditorialPortfolio({projects,onOpenProject,onSwitchToManager,onO
 
       <main id="ed-main" tabIndex={-1}>
         <section className="ed-cover" id="top" aria-labelledby="ed-title">
+          <div className="ed-cover-edition ed-mono"><span>A personal journal of design & code</span><span>Vol. 01 / An ongoing collection</span></div>
           <div className="ed-cover-copy"><p className="ed-eyebrow ed-mono">Independent design & development</p>
             <h1 id="ed-title"><span>Between</span><span><em>words</em> &</span><span>worlds.</span></h1>
             <p className="ed-cover-description">Thoughtful websites, applications, and useful tools. A practice in clarity, character, and attention to the details.</p>
@@ -74,13 +100,14 @@ export function EditorialPortfolio({projects,onOpenProject,onSwitchToManager,onO
           <div className="ed-cover-colophon"><span className="ed-mono">Design · Development · Curiosity</span><span className="ed-hand">still thinking. still making.</span><button type="button" onClick={()=>setSketches(value=>!value)} aria-pressed={sketches}>{sketches ? <Minus size={12}/> : <Plus size={12}/>}Sketch layer {sketches ? 'on' : 'off'}</button></div>
         </section>
 
+        <div className="ed-practice-strip" aria-label="Areas of practice"><span>Digital craft</span><span aria-hidden="true">✦</span><span>Human stories</span><span aria-hidden="true">✦</span><span>Curious thinking</span><span aria-hidden="true">✦</span><span>Considered details</span></div>
         <section className="ed-introduction" aria-labelledby="ed-intro-heading"><span className="ed-mono">A note on the work</span><h2 id="ed-intro-heading">Useful by intention.<br /><em>Personal by nature.</em></h2><p>I care about what an experience needs to do, how it feels to use, and the small details that make it clear.<br /><br />Clarity in function. Character in detail.</p></section>
 
         <section className="ed-section ed-work-section" id="work" aria-labelledby="ed-work-heading">
           <div className="ed-section-heading"><span className="ed-mono">01 / Selected work</span><h2 id="ed-work-heading">Thoughts,<br /><em>made tangible.</em></h2><a className="ed-text-link" href="https://hub.nielstudios.com/">The full project directory <ArrowUpRight size={15}/></a></div>
           {loading ? <div className="ed-state" role="status"><span className="ed-mono">Opening the collection</span><p>The work is on its way.</p></div> : loadError ? <div className="ed-state" role="alert"><h3>The collection couldn’t be opened.</h3><p>{loadError}</p><button className="ed-text-link" type="button" onClick={()=>window.location.reload()}>Try again <ArrowUpRight size={15}/></button></div> : !total ? <div className="ed-state"><h3>A collection in the making.</h3><p>New projects will appear here as the work grows.</p></div> : <>
             <div className="ed-projects">{featured.map((project,i)=><article className={`ed-feature${i%2 ? ' ed-feature-reverse' : ''}`} key={project.id}>
-              <div className="ed-feature-note"><span className="ed-feature-number">{String(i+1).padStart(2,'0')}</span><span className="ed-mono">{project.category}</span></div>
+              <div className="ed-feature-note"><span className="ed-feature-number">{String(i+1).padStart(2,'0')}</span><span className="ed-mono">{project.category}</span><span className="ed-feature-cross" aria-hidden="true">+</span></div>
               <ProjectLink className={`ed-project-image ed-image-${i%4}`} project={project} onOpenProject={onOpenProject}><div className="ed-browser"><span aria-hidden="true">● ● ●</span><span className="ed-mono">{projectHost(project.url)}</span><ArrowUpRight size={12}/></div><div className="ed-image-crop"><ProjectPreview project={project}/></div><span className="ed-image-visit ed-mono">Explore live project <ArrowUpRight size={14}/></span><span className="ed-sr-only">{project.title} — opens in a new tab</span></ProjectLink>
               <div className="ed-feature-copy"><span className="ed-mono">Project {String(i+1).padStart(2,'0')} / {project.category}</span><h3><ProjectLink project={project} onOpenProject={onOpenProject}>{project.title}</ProjectLink></h3><p>{project.description || 'A project from the ongoing Niel Studios collection.'}</p>{project.tags.length>0 && <ul className="ed-tags" aria-label={`${project.title} tags`}>{project.tags.slice(0,4).map((tag,n)=><li key={`${tag}-${n}`}>{tag}</li>)}</ul>}<ProjectLink className="ed-text-link" project={project} onOpenProject={onOpenProject}>Visit project <ArrowUpRight size={16}/></ProjectLink></div>
             </article>)}</div>
@@ -91,7 +118,7 @@ export function EditorialPortfolio({projects,onOpenProject,onSwitchToManager,onO
 
         <section className="ed-section ed-words" id="words" aria-labelledby="ed-words-heading"><div className="ed-section-heading"><span className="ed-mono">02 / In the margins</span><h2 id="ed-words-heading">A life between<br /><em>the lines.</em></h2><span className="ed-hand ed-reading-note">a few things I return to ↙</span></div>
           <div className="ed-reading-layout"><div className="ed-reading-intro"><p className="ed-lead">Literature is another way of paying attention.</p><p>An appreciation for language, atmosphere, and the significance of a small moment. These interests bring a wider perspective to the things I make.</p><div className="ed-word-sketch" aria-hidden="true"><svg viewBox="0 0 200 110" fill="none"><path d="M15 20q50-18 85 4 35-22 85-4v69q-45-16-85 0-42-16-85 0ZM100 24v65M28 36q34-9 59 2M28 48q34-9 59 2M28 60q34-9 59 2M113 38q25-11 58-2M113 50q25-11 58-2" stroke="currentColor" strokeWidth="1"/><path d="M9 96q90 17 182-4" stroke="currentColor" strokeWidth=".6"/></svg><span className="ed-hand">always another page.</span></div></div>
-            <div className="ed-reading-list"><article><span className="ed-mono">Reading note / I</span><a href="https://www.penguinrandomhouse.com/books/832372/white-nights-by-fyodor-dostoevsky/" target="_blank" rel="noopener noreferrer"><h3>White Nights</h3><ArrowUpRight size={20}/></a><span className="ed-reading-author">Fyodor Dostoevsky</span><p>The atmosphere of a fleeting encounter. The weight of a small moment. An interest in character and the things left unspoken.</p></article><article><span className="ed-mono">Reading note / II</span><a href="https://www.penguinrandomhouse.com/books/23470/the-myth-of-sisyphus-by-albert-camus/" target="_blank" rel="noopener noreferrer"><h3>The Myth of Sisyphus</h3><ArrowUpRight size={20}/></a><span className="ed-reading-author">Albert Camus</span><p>Perspective, persistence, and the questions behind everyday experience. A reason to look a little more closely.</p></article></div>
+            <div className="ed-reading-list"><article><span className="ed-book-numeral" aria-hidden="true">I.</span><span className="ed-mono">Reading note / I</span><a href="https://www.penguinrandomhouse.com/books/832372/white-nights-by-fyodor-dostoevsky/" target="_blank" rel="noopener noreferrer"><h3>White Nights</h3><ArrowUpRight size={20}/></a><span className="ed-reading-author">Fyodor Dostoevsky</span><p>The atmosphere of a fleeting encounter. The weight of a small moment. An interest in character and the things left unspoken.</p></article><article><span className="ed-book-numeral" aria-hidden="true">II.</span><span className="ed-mono">Reading note / II</span><a href="https://www.penguinrandomhouse.com/books/23470/the-myth-of-sisyphus-by-albert-camus/" target="_blank" rel="noopener noreferrer"><h3>The Myth of Sisyphus</h3><ArrowUpRight size={20}/></a><span className="ed-reading-author">Albert Camus</span><p>Perspective, persistence, and the questions behind everyday experience. A reason to look a little more closely.</p></article></div>
           </div>
         </section>
 
